@@ -19,7 +19,7 @@ export default function ProjectSection({
 
   return (
     <section
-    id="work"
+      id={`project-${project.id}`}
       className={`bg-background border-b h-screen flex flex-col items-center justify-center border-border/50 px-4 md:px-8 ${
         index === 0 ? "pt-14 md:pt-0 pb-20 md:pb-28" : "py-20 md:py-28"
       }`}
@@ -106,7 +106,7 @@ export default function ProjectSection({
                       ? (project.webImage ?? project.image)
                       : (project.mobileImage ?? project.image)
                   }
-                  title={`${project.title} ${project.mockupType === "browser" ? "Web" : "Mobile"} 1`}
+                  title={`${project.title} — ${project.mockupType === "browser" ? "Web" : "Mobile"} view 1`}
                   type={project.mockupType}
                   delay={`${index * 0.1 + 0.1}s`}
                 />
@@ -116,7 +116,7 @@ export default function ProjectSection({
                       ? (project.webImage ?? project.image)
                       : (project.mobileImage ?? project.image)
                   }
-                  title={`${project.title} ${project.mockupType === "browser" ? "Web" : "Mobile"} 2`}
+                  title={`${project.title} — ${project.mockupType === "browser" ? "Web" : "Mobile"} view 2`}
                   type={project.mockupType}
                   delay={`${index * 0.1 + 0.15}s`}
                 />
