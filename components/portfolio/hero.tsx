@@ -83,7 +83,7 @@ export default function Hero({ isLoading }: HeroProps) {
                 </p> */}
 
                 {/* The Big Header */}
-                <h1 className="text-5xl sm:text-5xl md:text-5xl lg:text-6xl font-bold leading-[1.3] text-center tracking-tighter">
+                <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-bold leading-[1.3] text-center tracking-tighter">
                   Your Partner for <br /> Custom Web & App Development.
                 </h1>
 

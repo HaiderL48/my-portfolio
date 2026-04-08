@@ -43,7 +43,7 @@ const BottomFilterBar = forwardRef<HTMLDivElement, BottomFilterBarProps>(
         className="fixed bottom-2 left-1/2 z-50 max-w-[calc(100vw-2rem)] -translate-x-1/2 bg-background/65 dark:bg-background/65 backdrop-blur-md border border-forground rounded-4xl opacity-0"
       >
         <div className="max-w-7xl mx-auto px-4 md:px-2">
-          <div className="flex items-center justify-center gap-2 md:gap-4 py-4 md:py-3 overflow-x-auto px-2">
+          <div className="flex items-center justify-center gap-0 md:gap-4 py-2 md:py-3 overflow-x-auto px-2">
             {filterItems.map((item) => {
               const isSelected = selectedCategory === item.value;
 
