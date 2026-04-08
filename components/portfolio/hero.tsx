@@ -64,8 +64,8 @@ export default function Hero({ isLoading }: HeroProps) {
   }, []);
 
   return (
-    <section className="h-screen bg-background border-b border-border/50 py-16 md:py-24 flex items-center flex-col justify-center">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 flex items-center flex-col justify-center">
+    <section className="min-h-screen bg-background border-b border-border/50 pt-24 pb-16 md:py-24 flex items-center flex-col justify-center overflow-hidden">
+      <div className="w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-16 flex items-center flex-col justify-center">
         <div className="space-y-6">
           {isLoading ? (
             <>
@@ -75,7 +75,7 @@ export default function Hero({ isLoading }: HeroProps) {
             </>
           ) : (
             <>
-              <div className="space-y-4 animate-fade-in-up flex flex-col items-center justify-center max-w-5xl mx-auto">
+              <div className="space-y-4 animate-fade-in-up flex flex-col items-center justify-center max-w-5xl  mx-auto">
                 {/* The "Intro" - Smaller, uppercase, and wider tracking for a modern feel */}
                 {/* Top Label */}
                 {/* <p className="text-md uppercase text-foreground mb-4">
@@ -83,12 +83,12 @@ export default function Hero({ isLoading }: HeroProps) {
                 </p> */}
 
                 {/* The Big Header */}
-                <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.3] text-center tracking-tighter">
+                <h1 className="text-5xl sm:text-5xl md:text-5xl lg:text-6xl font-bold leading-[1.3] text-center tracking-tighter">
                   Your Partner for <br /> Custom Web & App Development.
                 </h1>
 
                 {/* The Description */}
-                <p className="mt-0 min-[1440px]:text-[16px] text-[14px] leading-[1.25] text-foreground/60 max-[600px]:text-[16px] text-center max-[991px]:[&>br]:hidden max-w-2xl">
+                <p className="mt-0 text-[13px] sm:text-[14px] min-[1440px]:text-[16px] leading-relaxed text-foreground/60 text-center max-[991px]:[&>br]:hidden max-w-lg md:max-w-xl lg:max-w-2xl">
                   Specialized in creating seamless digital experiences across
                   Shopify, WordPress, and Wix. From intuitive UI/UX design to
                   robust mobile app development, I provide end-to-end technical
@@ -103,11 +103,11 @@ export default function Hero({ isLoading }: HeroProps) {
                   </a>
                 </div>
 
-                <div className="mt-10 marquee-container overflow-hidden max-w-4xl">
-                  <div className="marquee w-full">
+                <div className="mt-10 marquee-container overflow-hidden ">
+                  <div className="marquee w-sm sm:w-xl md:w-2xl lg:w-4xl ">
                     <div className="marquee-track flex gap-5" ref={trackRef}>
                       {[...marqueeItems, ...marqueeItems].map((item, index) => (
-                        <div key={`${item.label}-${index}`} className="p-2 md:p-3 lg:p-4 rounded-xl bg-accent-foreground dark:bg-accent text-xl md:text-2xl lg:text-3xl">
+                        <div key={`${item.label}-${index}`} className="p-2 md:p-3 lg:p-4 rounded-xl bg-accent-foreground dark:bg-accent text-2xl md:text-2xl lg:text-3xl">
                           {item.icon}
                           {/* <span>{item.label}</span> */}
                         </div>

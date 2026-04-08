@@ -77,11 +77,14 @@ export default function Header() {
             </a>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
             <ThemeToggle />
-            <button className="px-4 py-2 rounded-xl text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
+            <a
+              href="#contact"
+              className="px-3 py-1.5 md:px-4 md:py-2 rounded-xl text-xs md:text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors whitespace-nowrap"
+            >
               Get in Touch
-            </button>
+            </a>
           </div>
         </div>
       </nav>

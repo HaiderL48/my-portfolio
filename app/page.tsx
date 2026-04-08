@@ -16,12 +16,6 @@ export default function Home() {
   const bottomBarRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // Initial load
-    const timer = setTimeout(() => {}, 500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
     let trigger: any;
 
     const setupAnimation = async () => {
@@ -59,9 +53,7 @@ export default function Home() {
     setupAnimation();
 
     return () => {
-      if (trigger) {
-        trigger.kill();
-      }
+      if (trigger) trigger.kill();
     };
   }, []);
 
@@ -76,9 +68,8 @@ export default function Home() {
     setTimeout(() => setIsLoading(false), 300);
   };
 
-  // Force recompile
   return (
-    <main className="w-full ">
+    <main className="w-full overflow-x-hidden">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -88,37 +79,21 @@ export default function Home() {
             name: "Haider Limdiwala",
             url: "https://haiderlimdiwala.com",
             jobTitle: "Freelance Web & App Developer",
-            description:
-              "Freelance developer specializing in Shopify, WordPress, Wix, Flutter, and Next.js.",
-            knowsAbout: [
-              "Web Development",
-              "App Development",
-              "Shopify",
-              "WordPress",
-              "Wix",
-              "Flutter",
-              "Next.js",
-              "UI/UX Design",
-            ],
-            offers: {
-              "@type": "Offer",
-              description: "Custom web and app development services",
-            },
+            description: "Freelance developer specializing in Shopify, WordPress, Wix, Flutter, and Next.js.",
+            knowsAbout: ["Web Development", "App Development", "Shopify", "WordPress", "Wix", "Flutter", "Next.js", "UI/UX Design"],
+            offers: { "@type": "Offer", description: "Custom web and app development services" },
           }),
         }}
       />
       <Header />
       <Hero isLoading={isLoading} />
-     
+
       {/* Projects Showcase */}
-      <div
-        ref={showcaseRef}
-        className="w-full flex flex-col items-center pt-16"
-      >
-        <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-2">
-          What I’ve been up to lately
+      <div ref={showcaseRef} className="w-full flex flex-col items-center pt-16 overflow-hidden">
+        <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-2 text-center px-4">
+          What I've been up to lately
         </p>
-        <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight text-center px-4">
           A Journey Through My Work
         </h2>
         {isLoading ? (
@@ -130,25 +105,18 @@ export default function Home() {
           </div>
         ) : filteredProjects.length > 0 ? (
           filteredProjects.map((project, index) => (
-            <ProjectSection
-              key={project.id}
-              project={project}
-              reverse={index % 2 === 0}
-              index={index}
-            />
+            <ProjectSection key={project.id} project={project} reverse={index % 2 === 0} index={index} />
           ))
         ) : (
           <div className="flex items-center justify-center py-40">
-            <div className="text-center">
-              <p className="text-lg text-foreground/60">No projects found</p>
-            </div>
+            <p className="text-lg text-foreground/60">No projects found</p>
           </div>
         )}
       </div>
- <Services />
+
+      <Services />
       <Footer />
 
-      {/* Bottom Filter Bar */}
       <BottomFilterBar
         ref={bottomBarRef}
         selectedCategory={selectedCategory}
