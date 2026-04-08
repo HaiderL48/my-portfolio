@@ -31,7 +31,6 @@ export const metadata: Metadata = {
     "freelance developer",
     "mobile app development",
     "react native developer",
-    "developer"
   ],
   authors: [{ name: "Haider Limdiwala", url: BASE_URL }],
   creator: "Haider Limdiwala",
