@@ -30,6 +30,7 @@ export const metadata: Metadata = {
     "UI/UX design",
     "freelance developer",
     "mobile app development",
+    "react native developer",
   ],
   authors: [{ name: "Haider Limdiwala", url: BASE_URL }],
   creator: "Haider Limdiwala",
@@ -86,7 +87,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="font-sans antialiased" suppressHydrationWarning>
+      <body className={`${geist.variable} ${geistMono.variable} font-sans antialiased`} suppressHydrationWarning>
         <ThemeProvider>
           <SmoothScroll />
           {children}
