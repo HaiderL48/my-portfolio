@@ -49,9 +49,11 @@ export default function Header() {
             {/* <div className="w-12  rounded-full flex items-center justify-center">
              <img src="haider-avatar.webp" alt="" />
             </div> */}
-            <span className="font-semibold text-lg tracking-tight">
+            <a href="#">
+            <span className="cursor-pointer font-semibold text-lg tracking-tight">
               Haider Limdiwala
             </span>
+            </a>
           </div>
 
           <div className="hidden md:flex items-center gap-8">
