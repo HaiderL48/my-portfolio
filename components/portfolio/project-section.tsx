@@ -109,6 +109,7 @@ export default function ProjectSection({
                   title={`${project.title} — ${project.mockupType === "browser" ? "Web" : "Mobile"} view 1`}
                   type={project.mockupType}
                   delay={`${index * 0.1 + 0.1}s`}
+                  priority={index === 0}
                 />
                 <ProjectMockup
                   image={
@@ -119,6 +120,10 @@ export default function ProjectSection({
                   title={`${project.title} — ${project.mockupType === "browser" ? "Web" : "Mobile"} view 2`}
                   type={project.mockupType}
                   delay={`${index * 0.1 + 0.15}s`}
+                  priority={false}
+                />
+                  type={project.mockupType}
+                  delay={`${index * 0.1 + 0.15}s`}
                 />
               </div>
             ) : (
@@ -127,6 +132,7 @@ export default function ProjectSection({
                 title={project.title}
                 type={project.mockupType}
                 delay={`${index * 0.1 + 0.1}s`}
+                priority={index === 0}
               />
             )}
           </div>
