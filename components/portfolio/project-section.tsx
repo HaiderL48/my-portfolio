@@ -124,7 +124,7 @@ export default function ProjectSection({
                 />
                   type={project.mockupType}
                   delay={`${index * 0.1 + 0.15}s`}
-                />
+                
               </div>
             ) : (
               <ProjectMockup
