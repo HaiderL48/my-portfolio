@@ -1,7 +1,7 @@
 "use client";
 
+import Image from "next/image";
 import { PortfolioItem } from "@/lib/portfolio-data";
-import ProjectMockup from "./project-mockup";
 
 interface ProjectSectionProps {
   project: PortfolioItem;
@@ -44,34 +44,19 @@ export default function ProjectSection({ project, reverse, index }: ProjectSecti
             </div>
           </div>
 
-          {/* Mockup Side */}
+          {/* Image Side */}
           <div className="flex justify-center w-full lg:w-1/2">
-            {project.mockupType === "browser" || project.mockupType === "phone" ? (
-              <div className="grid w-full max-w-lg md:max-w-4xl gap-4 grid-cols-2">
-                <ProjectMockup
-                  image={project.mockupType === "browser" ? (project.webImage ?? project.image) : (project.mobileImage ?? project.image)}
-                  title={`${project.title} — view 1`}
-                  type={project.mockupType}
-                  delay={`${index * 0.1 + 0.1}s`}
-                  priority={index === 0}
-                />
-                <ProjectMockup
-                  image={project.mockupType === "browser" ? (project.webImage ?? project.image) : (project.mobileImage ?? project.image)}
-                  title={`${project.title} — view 2`}
-                  type={project.mockupType}
-                  delay={`${index * 0.1 + 0.15}s`}
-                  priority={false}
-                />
-              </div>
-            ) : (
-              <ProjectMockup
-                image={project.image}
-                title={project.title}
-                type={project.mockupType}
-                delay={`${index * 0.1 + 0.1}s`}
+            <div className="relative w-full max-w-lg">
+              <Image
+                src={project.image}
+                alt={project.title}
+                width={800}
+                height={600}
+                className="w-full h-auto object-contain"
+                sizes="(max-width: 768px) 100vw, 50vw"
                 priority={index === 0}
               />
-            )}
+            </div>
           </div>
 
         </div>

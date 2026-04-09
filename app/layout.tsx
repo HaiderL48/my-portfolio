@@ -89,6 +89,21 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geist.variable} ${geistMono.variable} font-sans antialiased`} suppressHydrationWarning>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: "Haider Limdiwala",
+              url: "https://haiderlimdiwala.com",
+              jobTitle: "Freelance Web & App Developer",
+              description: "Freelance developer specializing in Shopify, WordPress, Wix, Flutter, and Next.js.",
+              knowsAbout: ["Web Development", "App Development", "Shopify", "WordPress", "Wix", "Flutter", "Next.js", "UI/UX Design"],
+              offers: { "@type": "Offer", description: "Custom web and app development services" },
+            }),
+          }}
+        />
         <ThemeProvider>
           <SmoothScroll />
           {children}

@@ -64,7 +64,7 @@ export default function Hero({ isLoading }: HeroProps) {
   }, []);
 
   return (
-    <section className="min-h-screen bg-background border-b border-border/50 pt-24 pb-16 md:py-24 flex items-center flex-col justify-center overflow-hidden">
+    <section className=" bg-background border-b border-border/50 pt-24 pb-16 md:py-24 flex items-center flex-col justify-center overflow-hidden">
       <div className="w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-16 flex items-center flex-col justify-center">
         <div className="space-y-6">
           {isLoading ? (
