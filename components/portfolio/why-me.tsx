@@ -25,7 +25,7 @@ const benefits = [
 
 export default function WhyMe() {
   return (
-    <section className="py-20 border-b border-border/50">
+    <section className=" py-20 border-b border-border/50">
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
         <div className="flex flex-col items-center text-center mb-14">
           <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-2">

@@ -73,7 +73,7 @@ export default function Home() {
     <main className="w-full overflow-x-hidden">
       <Header />
       <Hero isLoading={isLoading} />
-      <WhyMe />
+     
 
       {/* Projects Showcase */}
       <div ref={showcaseRef} className="w-full flex flex-col items-center pt-16 overflow-hidden">
@@ -100,7 +100,7 @@ export default function Home() {
           </div>
         )}
       </div>
-
+ {/* <WhyMe /> */}
       <Services />
       <Footer />
 
