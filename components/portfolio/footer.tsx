@@ -53,7 +53,7 @@ export default function Footer() {
         {/* Bottom Section */}
         <div className="border-t border-border mt-16 md:mt-24 pt-8 md:pt-12 flex flex-col md:flex-row items-center justify-center gap-6">
           <p className="text-sm text-foreground/50">
-            © 2026 Hiader Portfolio. All rights reserved.
+            © 2026 Haider Portfolio. All rights reserved.
           </p>
           {/* <div className="flex gap-6 md:gap-8">
             {["Twitter", "LinkedIn", "GitHub", "Dribbble"].map((social) => (
