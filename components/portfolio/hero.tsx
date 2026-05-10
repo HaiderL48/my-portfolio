@@ -12,6 +12,7 @@ import { RiNextjsFill } from "react-icons/ri";
 import { FaFlutter } from "react-icons/fa6";
 import { IoLogoFirebase } from "react-icons/io5";
 import { IoLogoAndroid } from "react-icons/io";
+import { SiGsap } from "react-icons/si";
 
 interface HeroProps {
   isLoading: boolean;
@@ -33,6 +34,7 @@ const marqueeItems: MarqueeItem[] = [
   { label: "Figma", icon: <IoLogoFigma /> },
   { label: "Google Cloud", icon: <BiLogoGoogleCloud /> },
   { label: "Zoho", icon: <SiZoho /> },
+  { label: "GSAP", icon: <SiGsap /> },
 ];
 
 export default function Hero({ isLoading }: HeroProps) {

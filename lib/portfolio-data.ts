@@ -53,12 +53,29 @@ const BASE = "/mockups";
 
 export const portfolioItems: PortfolioItem[] = [
   {
-    id: "1",
+    id: "0",
     title: "Real Estate",
     description: "Modern online shopping experience with seamless checkout flow, advanced filtering, and real-time inventory management. Built with React and Node.js for optimal performance.",
     category: ["wordpress"],
     image: `${BASE}/alliancebayrealtygroup.webp`,
     tags: ["Wordpress"],
+    mockupType: "browser",
+    accentColor: "#2563eb",
+    featured: true,
+    testimonial: {
+      text: "The platform increased our sales by 40% in the first month. Exceptional work!",
+      author: "Sarah Johnson",
+      role: "E-Commerce Manager",
+      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop",
+    },
+  },
+  {
+    id: "1",
+    title: "Animated Website",
+    description: "Modern Animated Website based on popular Anime Jujutsu Kaisen. Made with stuning Animations and Music.",
+    category: ["web"],
+    image: `${BASE}/gojo-vs-sukuna.webp`,
+    tags: ["React","GSAP","Tailwind CSS"],
     mockupType: "browser",
     accentColor: "#2563eb",
     featured: true,
