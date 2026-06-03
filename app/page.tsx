@@ -32,12 +32,22 @@ export default function Home() {
 
       const showBar = () => {
         if (!bottomBarRef.current) return;
-        gsap.to(bottomBarRef.current, { autoAlpha: 1, y: 0, duration: 0.4, ease: "power2.out" });
+        gsap.to(bottomBarRef.current, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.4,
+          ease: "power2.out",
+        });
       };
 
       const hideBar = () => {
         if (!bottomBarRef.current) return;
-        gsap.to(bottomBarRef.current, { autoAlpha: 0, y: 100, duration: 0.35, ease: "power2.in" });
+        gsap.to(bottomBarRef.current, {
+          autoAlpha: 0,
+          y: 100,
+          duration: 0.35,
+          ease: "power2.in",
+        });
       };
 
       trigger = ScrollTrigger.create({
@@ -61,7 +71,9 @@ export default function Home() {
   const filteredProjects =
     selectedCategory === "all"
       ? portfolioItems.filter((item) => item.featured)
-      : portfolioItems.filter((item) => item.category.includes(selectedCategory));
+      : portfolioItems.filter((item) =>
+          item.category.includes(selectedCategory),
+        );
 
   const handleCategoryChange = (category: Category) => {
     setIsLoading(true);
@@ -73,10 +85,14 @@ export default function Home() {
     <main className="w-full overflow-x-hidden">
       <Header />
       <Hero isLoading={isLoading} />
-     
 
+      {/* <WhyMe /> */}
+      <Services />
       {/* Projects Showcase */}
-      <div ref={showcaseRef} className="w-full flex flex-col items-center pt-16 overflow-hidden">
+      <div
+        ref={showcaseRef}
+        className="w-full flex flex-col items-center pt-16 overflow-hidden"
+      >
         <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-2 text-center px-4">
           What I've been up to lately
         </p>
@@ -92,7 +108,12 @@ export default function Home() {
           </div>
         ) : filteredProjects.length > 0 ? (
           filteredProjects.map((project, index) => (
-            <ProjectSection key={project.id} project={project} reverse={index % 2 === 0} index={index} />
+            <ProjectSection
+              key={project.id}
+              project={project}
+              reverse={index % 2 === 0}
+              index={index}
+            />
           ))
         ) : (
           <div className="flex items-center justify-center py-40">
@@ -100,8 +121,7 @@ export default function Home() {
           </div>
         )}
       </div>
- {/* <WhyMe /> */}
-      <Services />
+
       <Footer />
 
       <BottomFilterBar
