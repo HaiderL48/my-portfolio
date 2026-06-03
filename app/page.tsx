@@ -90,6 +90,7 @@ export default function Home() {
       <Services />
       {/* Projects Showcase */}
       <div
+        id="work"
         ref={showcaseRef}
         className="w-full flex flex-col items-center pt-16 overflow-hidden"
       >
