@@ -1,0 +1,92 @@
+.service-stack-corner {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+}
+
+.service-stack-corner--tl {
+  top: 0;
+  left: 0;
+  border-top: 1px solid #999;
+  border-left: 1px solid #999;
+}
+
+.service-stack-corner--tr {
+  top: 0;
+  right: 0;
+  border-top: 1px solid #999;
+  border-right: 1px solid #999;
+}
+
+.service-stack-corner--bl {
+  bottom: 0;
+  left: 0;
+  border-bottom: 1px solid #999;
+  border-left: 1px solid #999;
+}
+
+.service-stack-corner--br {
+  bottom: 0;
+  right: 0;
+  border-bottom: 1px solid #999;
+  border-right: 1px solid #999;
+}
+
+.service-stack-layer {
+  border: 1px dashed #b8b8b4;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+.service-stack-section {
+  overflow: clip;
+  height: 380vh;
+}
+
+.service-stack-beats {
+  min-height: 280px;
+}
+
+[data-stack-beat] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.service-stack-scene {
+  perspective: 1400px;
+  transform-style: preserve-3d;
+  width: 100%;
+}
+
+.service-stack-group {
+  position: relative;
+  width: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.service-stack-group--animated {
+  margin: 0;
+}
+
+.service-stack-group--animated .service-stack-layer-item {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  margin: 0;
+}
+
+.service-stack-group--flow .service-stack-layer-item {
+  position: relative;
+  width: 100%;
+}
+
+.service-stack-group--flow .service-stack-layer-item + .service-stack-layer-item {
+  margin-top: 10px;
+}
+
+.service-stack-layer-item {
+  transform-style: preserve-3d;
+}

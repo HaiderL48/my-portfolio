@@ -19,7 +19,7 @@ export default function ConnectedProjectsSection({
 
   return (
     <section className="py-16 md:py-24 border-b border-border/50 bg-muted/30">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+      <div className="site-container">
         <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-2">
           Same product
         </p>

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Service Architecture — ScrollTrigger Demo</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #d8d5cc;
+        --card-bg: #1e1c1a;
+        --ink: #1e1c1a;
+        --muted: rgba(30, 28, 26, 0.58);
+        --layer-border: rgba(30, 28, 26, 0.28);
+        --layer-fill: rgba(255, 255, 255, 0.62);
+        --layer-h: 96px;
+        --layer-gap: 18px;
+      }
+
+      body {
+        font-family: Georgia, "Times New Roman", serif;
+        background: var(--bg);
+        color: var(--ink);
+      }
+
+      .intro,
+      .outro {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 2rem;
+        text-align: center;
+        font-family: system-ui, sans-serif;
+        color: var(--muted);
+      }
+
+      .intro h1 {
+        font-family: Georgia, serif;
+        font-size: clamp(2rem, 4vw, 3rem);
+        color: var(--ink);
+        font-weight: 600;
+      }
+
+      .intro p {
+        margin-top: 0.75rem;
+        font-size: 0.9rem;
+      }
+
+      .scroll-track {
+        height: 400vh;
+      }
+
+      .pin-shell {
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .layout {
+        display: flex;
+        align-items: center;
+        gap: clamp(2rem, 4vw, 4rem);
+        height: 100%;
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 0 clamp(1.25rem, 4vw, 3rem);
+      }
+
+      .left-col {
+        flex: 0 0 34%;
+        align-self: stretch;
+        display: flex;
+        align-items: center;
+      }
+
+      .card-stage {
+        position: relative;
+        width: 100%;
+        min-height: 340px;
+      }
+
+      .beat-card {
+        position: absolute;
+        inset: 0;
+        background: var(--card-bg);
+        color: #fff;
+        padding: clamp(1.75rem, 3vw, 2.5rem);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .beat-label {
+        font-family: system-ui, sans-serif;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.42);
+        margin-bottom: 1.35rem;
+      }
+
+      .beat-heading {
+        font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+        line-height: 1.12;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        margin-bottom: 1rem;
+      }
+
+      .beat-body {
+        font-family: system-ui, sans-serif;
+        font-size: 0.92rem;
+        line-height: 1.65;
+        color: rgba(255, 255, 255, 0.7);
+        max-width: 32ch;
+      }
+
+      .right-col {
+        flex: 1;
+        position: relative;
+        min-width: 0;
+        height: min(78vh, 620px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .dot-cluster {
+        position: absolute;
+        top: 0;
+        right: 2%;
+        width: 110px;
+        height: 100px;
+        z-index: 5;
+        pointer-events: none;
+      }
+
+      .dot-cluster span {
+        position: absolute;
+        border-radius: 50%;
+        background: var(--ink);
+      }
+
+      .scene {
+        position: relative;
+        width: 100%;
+        max-width: 640px;
+        height: 100%;
+        perspective: 1400px;
+        perspective-origin: 50% 42%;
+      }
+
+      .wire-box {
+        position: absolute;
+        left: 4%;
+        top: 6%;
+        width: 92%;
+        height: 88%;
+        border: 1px dashed rgba(30, 28, 26, 0.12);
+        pointer-events: none;
+        opacity: 1;
+        transition: opacity 0.2s;
+      }
+
+      .wire-box.is-flat {
+        opacity: 0;
+      }
+
+      .stack-wrapper {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 92%;
+        height: calc(var(--layer-h) * 4 + var(--layer-gap) * 3);
+        transform-style: preserve-3d;
+        transform: translate3d(-50%, -50%, 0) rotateX(28deg) rotateY(-20deg);
+        will-change: transform;
+      }
+
+      .layer {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        width: 94%;
+        height: var(--layer-h);
+        padding: 0.85rem 1.35rem;
+        border: 1px dashed var(--layer-border);
+        background: var(--layer-fill);
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset;
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+        transform-origin: center center;
+      }
+
+      .layer-team {
+        top: 0;
+      }
+
+      .layer-agents {
+        top: calc(var(--layer-h) + var(--layer-gap));
+      }
+
+      .layer-world {
+        top: calc((var(--layer-h) + var(--layer-gap)) * 2);
+        height: calc(var(--layer-h) + 8px);
+      }
+
+      .layer-production {
+        top: calc((var(--layer-h) + var(--layer-gap)) * 3);
+      }
+
+      .layer-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        line-height: 1.15;
+      }
+
+      .layer-sub {
+        margin-top: 0.28rem;
+        font-family: system-ui, sans-serif;
+        font-size: 0.74rem;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+
+      .corner {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        pointer-events: none;
+      }
+
+      .corner--tl {
+        top: -1px;
+        left: -1px;
+        border-top: 1px solid rgba(30, 28, 26, 0.5);
+        border-left: 1px solid rgba(30, 28, 26, 0.5);
+      }
+
+      .corner--tr {
+        top: -1px;
+        right: -1px;
+        border-top: 1px solid rgba(30, 28, 26, 0.5);
+        border-right: 1px solid rgba(30, 28, 26, 0.5);
+      }
+
+      .corner--bl {
+        bottom: -1px;
+        left: -1px;
+        border-bottom: 1px solid rgba(30, 28, 26, 0.5);
+        border-left: 1px solid rgba(30, 28, 26, 0.5);
+      }
+
+      .corner--br {
+        bottom: -1px;
+        right: -1px;
+        border-bottom: 1px solid rgba(30, 28, 26, 0.5);
+        border-right: 1px solid rgba(30, 28, 26, 0.5);
+      }
+
+      .icon-row {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        margin-top: 0.45rem;
+      }
+
+      .icon-tile {
+        width: 24px;
+        height: 24px;
+        border: 1px dashed var(--layer-border);
+        border-radius: 4px;
+        display: grid;
+        place-items: center;
+        background: rgba(255, 255, 255, 0.55);
+      }
+
+      .icon-tile svg {
+        width: 13px;
+        height: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="intro">
+      <div>
+        <h1>Service Architecture</h1>
+        <p>Scroll — GSAP ScrollTrigger · scrub: 1 · 400vh</p>
+      </div>
+    </header>
+
+    <section class="scroll-track" id="scroll-track">
+      <div class="pin-shell" id="pin-shell">
+        <div class="layout">
+          <div class="left-col">
+            <div class="card-stage">
+              <article class="beat-card" data-beat="0">
+                <p class="beat-label">The Vision</p>
+                <h2 class="beat-heading">Your stack, owned end to end.</h2>
+                <p class="beat-body">
+                  Two bookends anchor the system — your team at the top and
+                  production at the bottom. Everything else slots in between.
+                </p>
+              </article>
+              <article class="beat-card" data-beat="1">
+                <p class="beat-label">The World Model</p>
+                <h2 class="beat-heading">A layer that owns the runtime.</h2>
+                <p class="beat-body">
+                  Unified context across infra, telemetry, and code — one
+                  source of truth the whole stack can reason over.
+                </p>
+              </article>
+              <article class="beat-card" data-beat="2">
+                <p class="beat-label">The Agent Layer</p>
+                <h2 class="beat-heading">Autonomous operators, not dashboards.</h2>
+                <p class="beat-body">
+                  Agents sit above the world model and act on live signals —
+                  Kubernetes, Grafana, and GitHub wired into one control plane.
+                </p>
+              </article>
+              <article class="beat-card" data-beat="3">
+                <p class="beat-label">The Autonomous Layer</p>
+                <h2 class="beat-heading">Everyone else watches. We operate.</h2>
+                <p class="beat-body">
+                  The full stack flattens into a single operational surface —
+                  every layer visible, every action accountable.
+                </p>
+              </article>
+            </div>
+          </div>
+
+          <div class="right-col">
+            <div class="dot-cluster" id="dot-cluster" aria-hidden="true"></div>
+            <div class="scene">
+              <div class="wire-box" id="wire-box" aria-hidden="true"></div>
+              <div class="stack-wrapper" id="stack-wrapper">
+                <div class="layer layer-team" id="layer-team">
+                  <span class="corner corner--tl"></span>
+                  <span class="corner corner--tr"></span>
+                  <span class="corner corner--bl"></span>
+                  <span class="corner corner--br"></span>
+                  <h3 class="layer-title">Your Team</h3>
+                  <p class="layer-sub">Vision, ownership, and success metrics</p>
+                </div>
+
+                <div class="layer layer-agents" id="layer-agents">
+                  <span class="corner corner--tl"></span>
+                  <span class="corner corner--tr"></span>
+                  <span class="corner corner--bl"></span>
+                  <span class="corner corner--br"></span>
+                  <h3 class="layer-title">Antimetal Agents</h3>
+                  <p class="layer-sub">Autonomous operators across your infrastructure</p>
+                </div>
+
+                <div class="layer layer-world" id="layer-world">
+                  <span class="corner corner--tl"></span>
+                  <span class="corner corner--tr"></span>
+                  <span class="corner corner--bl"></span>
+                  <span class="corner corner--br"></span>
+                  <h3 class="layer-title">Antimetal World Model</h3>
+                  <p class="layer-sub">Runtime context, telemetry, and system state</p>
+                  <div class="icon-row" id="icon-row">
+                    <div class="icon-tile" title="Kubernetes">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M12 2.5l7.5 4.3v8.6L12 20.7 4.5 15.4V6.8L12 2.5z" stroke="currentColor" stroke-width="1.4"/>
+                        <circle cx="12" cy="11.5" r="2.2" fill="currentColor"/>
+                      </svg>
+                    </div>
+                    <div class="icon-tile" title="Grafana">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.4"/>
+                        <path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                    <div class="icon-tile" title="GitHub">
+                      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.52 2.87 8.35 6.84 9.7.5.1.68-.22.68-.5 0-.24-.01-.87-.01-1.7-2.78.62-3.37-1.36-3.37-1.36-.45-1.17-1.12-1.48-1.12-1.48-.92-.64.07-.63.07-.63 1.02.07 1.55 1.06 1.55 1.06.9 1.57 2.36 1.12 2.94.85.09-.67.35-1.12.64-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.27 2.75 1.05A9.2 9.2 0 0 1 12 6.84c.85.004 1.71.12 2.51.34 1.9-1.32 2.74-1.05 2.74-1.05.55 1.4.21 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.07.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.8 0 .28.18.61.69.5A10.02 10.02 0 0 0 22 12.26C22 6.58 17.52 2 12 2z"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="layer layer-production" id="layer-production">
+                  <span class="corner corner--tl"></span>
+                  <span class="corner corner--tr"></span>
+                  <span class="corner corner--bl"></span>
+                  <span class="corner corner--br"></span>
+                  <h3 class="layer-title">Production</h3>
+                  <p class="layer-sub">Live workloads your users depend on</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="outro">End of scroll sequence</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+    <script>
+      gsap.registerPlugin(ScrollTrigger);
+
+      const cluster = document.getElementById("dot-cluster");
+      [
+        [52, 72], [68, 58], [82, 44], [38, 56], [54, 42], [70, 28],
+        [24, 68], [40, 82], [96, 52], [24, 42], [96, 36], [82, 66],
+      ].forEach(([x, y], i) => {
+        const dot = document.createElement("span");
+        const s = 5 + (i % 3) * 2;
+        dot.style.cssText = `width:${s}px;height:${s}px;left:${x}px;top:${y}px;`;
+        cluster.appendChild(dot);
+      });
+
+      const beats = gsap.utils.toArray(".beat-card");
+      const stack = document.getElementById("stack-wrapper");
+      const wireBox = document.getElementById("wire-box");
+      const layers = {
+        team: document.getElementById("layer-team"),
+        agents: document.getElementById("layer-agents"),
+        world: document.getElementById("layer-world"),
+        production: document.getElementById("layer-production"),
+      };
+      const iconRow = document.getElementById("icon-row");
+
+      /* Depth-only offsets — vertical spacing comes from CSS `top` */
+      const isoDepth = {
+        team: { x: 0, z: 72, opacity: 1 },
+        agents: { x: 130, z: 48, opacity: 0 },
+        world: { x: 130, z: 24, opacity: 0 },
+        production: { x: 0, z: 0, opacity: 1 },
+      };
+
+      Object.entries(isoDepth).forEach(([key, pos]) => {
+        gsap.set(layers[key], {
+          x: pos.x,
+          y: 0,
+          z: pos.z,
+          opacity: pos.opacity,
+          force3D: true,
+        });
+      });
+      gsap.set(iconRow, { opacity: 0, x: 20 });
+
+      function showBeat(index) {
+        beats.forEach((card, i) => {
+          gsap.set(card, { autoAlpha: i === index ? 1 : 0 });
+        });
+      }
+      showBeat(0);
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#scroll-track",
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 1,
+          pin: "#pin-shell",
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            wireBox.classList.toggle("is-flat", self.progress > 0.72);
+          },
+        },
+      });
+
+      /* Left card — exclusive visibility, no crossfade ghosting */
+      tl.set(beats[0], { autoAlpha: 1 }, 0)
+        .set([beats[1], beats[2], beats[3]], { autoAlpha: 0 }, 0)
+        .set(beats[0], { autoAlpha: 0 }, 0.21)
+        .set(beats[1], { autoAlpha: 1 }, 0.21)
+        .set(beats[1], { autoAlpha: 0 }, 0.46)
+        .set(beats[2], { autoAlpha: 1 }, 0.46)
+        .set(beats[2], { autoAlpha: 0 }, 0.71)
+        .set(beats[3], { autoAlpha: 1 }, 0.71);
+
+      /* 25% — World Model slides in from the side */
+      tl.to(
+        layers.world,
+        { x: 0, opacity: 1, duration: 0.5, ease: "power2.out" },
+        0.25,
+      );
+
+      /* 50% — Agents + icons */
+      tl.to(
+        layers.agents,
+        { x: 0, opacity: 1, duration: 0.5, ease: "power2.out" },
+        0.5,
+      ).to(
+        iconRow,
+        { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" },
+        0.53,
+      );
+
+      /* 75% — flatten to blueprint (rotation only; layers stay vertically spaced) */
+      tl.to(
+        stack,
+        { rotateX: 0, rotateY: 0, duration: 0.6, ease: "power2.inOut" },
+        0.75,
+      )
+        .to(
+          [layers.team, layers.agents, layers.world, layers.production],
+          { x: 0, z: 0, duration: 0.45, ease: "power2.inOut" },
+          0.75,
+        )
+        .to(iconRow, { opacity: 1, x: 0, duration: 0.2 }, 0.78);
+
+      tl.to(cluster, { y: -20, ease: "none", duration: 1 }, 0);
+
+      window.addEventListener("load", () => ScrollTrigger.refresh());
+      window.addEventListener("resize", () => ScrollTrigger.refresh());
+    </script>
+  </body>
+</html>

@@ -43,41 +43,41 @@ export default function Header() {
       ref={headerRef}
       className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/65 backdrop-blur-sm"
     >
-      <nav className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-3 md:py-4">
+      <nav className="site-container py-3 md:py-4 2xl:py-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             {/* <div className="w-12  rounded-full flex items-center justify-center">
              <img src="haider-avatar.webp" alt="" />
             </div> */}
             <a href="/">
-            <span className="cursor-pointer font-semibold text-lg tracking-tight">
+            <span className="cursor-pointer font-semibold text-lg 2xl:text-xl tracking-tight">
               Haider Limdiwala
             </span>
             </a>
           </div>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-8 2xl:gap-10">
             <a
               href="/work"
-              className="text-sm text-foreground/70 hover:text-foreground transition-colors"
+              className="text-sm 2xl:text-base text-foreground/70 hover:text-foreground transition-colors"
             >
               Work
             </a>
             <a
               href="/services"
-              className="text-sm text-foreground/70 hover:text-foreground transition-colors"
+              className="text-sm 2xl:text-base text-foreground/70 hover:text-foreground transition-colors"
             >
               Services
             </a>
             <a
               href="/about"
-              className="text-sm text-foreground/70 hover:text-foreground transition-colors"
+              className="text-sm 2xl:text-base text-foreground/70 hover:text-foreground transition-colors"
             >
               About
             </a>
             <a
               href="/contact"
-              className="text-sm text-foreground/70 hover:text-foreground transition-colors"
+              className="text-sm 2xl:text-base text-foreground/70 hover:text-foreground transition-colors"
             >
               Contact
             </a>
@@ -87,7 +87,7 @@ export default function Header() {
             <ThemeToggle />
             <a
               href="/contact"
-              className="px-3 py-1.5 md:px-4 md:py-2 rounded-xl text-xs md:text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors whitespace-nowrap"
+              className="px-3 py-1.5 md:px-4 md:py-2 2xl:px-5 2xl:py-2.5 rounded-xl text-xs md:text-sm 2xl:text-base font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors whitespace-nowrap"
             >
               Hire me
             </a>

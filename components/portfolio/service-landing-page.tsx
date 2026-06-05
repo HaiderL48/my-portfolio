@@ -30,7 +30,7 @@ export default function ServiceLandingPage({ service }: ServiceLandingPageProps)
           className="pointer-events-none absolute inset-0 bg-gradient-to-b from-muted/60 via-background to-background"
           aria-hidden
         />
-        <div className="relative max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+        <div className="relative site-container">
           <Link
             href="/services"
             className="text-sm text-foreground/60 hover:text-primary transition-colors"
@@ -119,7 +119,7 @@ export default function ServiceLandingPage({ service }: ServiceLandingPageProps)
 
       {/* Benefits */}
       <section className="py-16 md:py-20 border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+        <div className="site-container">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-2">
               Why work with me
@@ -149,7 +149,7 @@ export default function ServiceLandingPage({ service }: ServiceLandingPageProps)
 
       {/* Overview + deliverables */}
       <section className="py-16 md:py-24 border-b border-border/50 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+        <div className="site-container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
             <div className="space-y-6">
               <h2 className="text-3xl font-extrabold tracking-tight">
@@ -184,7 +184,7 @@ export default function ServiceLandingPage({ service }: ServiceLandingPageProps)
 
       {/* Process */}
       <section className="py-16 md:py-24 border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+        <div className="site-container">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-2">
               Process
@@ -204,7 +204,7 @@ export default function ServiceLandingPage({ service }: ServiceLandingPageProps)
 
       {/* Portfolio */}
       <section id="work" className="py-16 md:py-24 border-b border-border/50 scroll-mt-28">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+        <div className="site-container">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
             <div>
               <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-2">
@@ -246,7 +246,7 @@ export default function ServiceLandingPage({ service }: ServiceLandingPageProps)
 
       {/* Other services */}
       <section className="py-16 md:py-24 border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+        <div className="site-container">
           <div className="mb-10">
             <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-2">
               More services
@@ -261,7 +261,7 @@ export default function ServiceLandingPage({ service }: ServiceLandingPageProps)
 
       {/* Final CTA */}
       <section className="py-20 md:py-28 bg-primary text-primary-foreground">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 text-center">
+        <div className="site-container text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-balance">
             Let&apos;s build your {service.title.toLowerCase()} project
           </h2>

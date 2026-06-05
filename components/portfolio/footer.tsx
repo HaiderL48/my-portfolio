@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="border-t border-border bg-background mt-0">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-20 md:py-32">
+      <div className="site-container py-20 md:py-32">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16">
           {/* CTA Section */}
           <div className="md:col-span-1 space-y-6 animate-slide-in-left">

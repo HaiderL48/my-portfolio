@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 export default function HomeCta() {
   return (
     <section className="py-20 md:py-28 border-b border-border/50">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+      <div className="site-container">
         <div className="rounded-3xl bg-primary text-primary-foreground px-8 py-12 md:px-14 md:py-16 text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-balance">
             Ready to build something?

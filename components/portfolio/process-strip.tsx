@@ -3,7 +3,7 @@ import { homeProcessSteps } from "@/lib/site-data";
 export default function ProcessStrip() {
   return (
     <section className="py-16 md:py-20 border-b border-border/50 bg-muted/30">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+      <div className="site-container">
         <div className="text-center max-w-2xl mx-auto mb-10 md:mb-12">
           <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-2">
             How I work

@@ -1,52 +1,44 @@
-.services-intro {
+.services-cards {
+  width: 100%;
+  flex-shrink: 0;
+  margin-top: auto;
+  pointer-events: auto;
   will-change: transform;
+  overflow: visible;
 }
 
-.services-stack-wrapper {
+.services-stack {
   position: relative;
-  z-index: 10;
   width: 100%;
-  margin-top: 2.5rem;
-  padding-top: 1rem;
-  padding-bottom: 3rem;
-}
-
-@media (min-width: 768px) {
-  .services-stack-wrapper {
-    margin-top: 3.5rem;
-    padding-top: 1.5rem;
-  }
-}
-
-.services-stack-cards {
-  width: 100%;
-  margin: 0 auto;
-}
-
-.services-card-wrapper {
-  width: 100%;
-  perspective: 800px;
-  margin-bottom: 3rem;
-}
-
-.services-card-wrapper:last-child {
-  margin-bottom: 0;
+  isolation: isolate;
+  overflow: visible;
 }
 
 .services-card {
   width: 100%;
   transform-origin: top center;
-  backface-visibility: hidden;
   will-change: transform;
+  z-index: 0;
+  overflow: visible;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .services-card-wrapper {
-    perspective: none;
-    margin-bottom: 1.5rem;
-  }
+.services-card:not(:first-child) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
 
-  .services-card {
-    transform: none !important;
+.services-stack--static .services-card:not(:first-child) {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  margin-top: 1rem;
+}
+
+@media (min-width: 640px) {
+  .services-stack--static .services-card:not(:first-child) {
+    margin-top: 1.25rem;
   }
 }

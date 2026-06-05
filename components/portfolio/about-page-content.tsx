@@ -11,7 +11,7 @@ export default function AboutPageContent() {
   return (
     <>
       <section className="relative pt-28 pb-16 md:pt-36 md:pb-24 border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+        <div className="site-container">
           <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-2">
             About
           </p>
@@ -22,7 +22,7 @@ export default function AboutPageContent() {
       </section>
 
       <section className="py-16 md:py-24 border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div className="site-container grid grid-cols-1 lg:grid-cols-12 gap-12">
           <div className="lg:col-span-7 space-y-6">
             <h2 className="text-2xl font-bold">My story</h2>
             {content.story.map((p, i) => (
@@ -55,7 +55,7 @@ export default function AboutPageContent() {
       <Services />
 
       <section className="py-16 md:py-24 border-b border-border/50 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+        <div className="site-container">
           <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-10">
             Skills & expertise
           </h2>
@@ -71,7 +71,7 @@ export default function AboutPageContent() {
       </section>
 
       <section className="py-16 md:py-20 border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+        <div className="site-container">
           <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-10">
             How I work
           </h2>
@@ -92,7 +92,7 @@ export default function AboutPageContent() {
       </section>
 
       <section className="py-16 md:py-20 border-b border-border/50 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+        <div className="site-container">
           <h2 className="text-2xl font-extrabold mb-8">Journey</h2>
           <ol className="space-y-6 border-l-2 border-border pl-6">
             {content.timeline.map((item) => (
@@ -109,7 +109,7 @@ export default function AboutPageContent() {
       <TestimonialsSection />
 
       <section className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 text-center">
+        <div className="site-container text-center">
           <h2 className="text-3xl font-extrabold">Want to work together?</h2>
           <p className="mt-3 text-foreground/60">Say hello — I&apos;d love to hear about your project.</p>
           <Link

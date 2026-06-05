@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   categories,
   disciplineLabels,
@@ -11,44 +13,336 @@ import {
   type Category,
 } from "@/lib/portfolio-data";
 import { TechBadgeList } from "@/components/portfolio/tech-badge";
+import "./home-featured-work.css";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const filterOptions: { value: Category; label: string }[] = [
   { value: "all", label: "All" },
   ...categories.map((c) => ({ value: c.value, label: c.label })),
 ];
 
-export default function HomeFeaturedWork() {
-  const [filter, setFilter] = useState<Category>("all");
+const MAX_DISPLAY = 6;
+const PIN_OFFSET = 72;
 
-  const filtered =
-    filter === "all"
-      ? portfolioItems.filter((p) => p.featured)
-      : portfolioItems.filter(
-          (p) => p.featured && p.category.includes(filter),
+function ProjectCard({
+  project,
+  className = "",
+}: {
+  project: (typeof portfolioItems)[number];
+  className?: string;
+}) {
+  return (
+    <Link
+      href={`/work/${project.slug}`}
+      data-project-card
+      className={`group featured-work-card flex flex-col rounded-2xl border border-border bg-card overflow-hidden hover:shadow-lg hover:border-primary/20 transition-[box-shadow,border-color] duration-300 ${className}`.trim()}
+    >
+      <div className="relative aspect-[16/11] bg-muted overflow-hidden">
+        <Image
+          src={project.image}
+          alt={project.groupTitle}
+          fill
+          className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+          sizes="(max-width: 640px) 82vw, (max-width: 1024px) 58vw, 42vw"
+        />
+        <span className="absolute top-3 left-3 rounded-full bg-background/90 backdrop-blur px-3 py-1 text-xs font-semibold border border-border">
+          {disciplineLabels[project.discipline]}
+        </span>
+      </div>
+      <div className="p-5 flex flex-1 flex-col gap-3">
+        <h3 className="text-lg font-bold group-hover:text-primary transition-colors">
+          {project.groupTitle}
+        </h3>
+        <p className="text-sm text-foreground/60 line-clamp-2 leading-relaxed flex-1">
+          {project.description}
+        </p>
+        <TechBadgeList
+          items={project.tags.slice(0, 3)}
+          size="sm"
+          variant="muted"
+        />
+        <span className="text-sm font-medium text-primary inline-flex items-center gap-1">
+          Case study
+          <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+        </span>
+      </div>
+    </Link>
+  );
+}
+
+function FilterPills({
+  filter,
+  onChange,
+  className = "",
+}: {
+  filter: Category;
+  onChange: (value: Category) => void;
+  className?: string;
+}) {
+  return (
+    <div className={`flex flex-wrap gap-2 ${className}`.trim()}>
+      {filterOptions.map((opt) => (
+        <button
+          key={opt.value}
+          type="button"
+          onClick={() => onChange(opt.value)}
+          className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+            filter === opt.value
+              ? "bg-primary text-primary-foreground"
+              : "border border-border bg-card text-foreground/70 hover:bg-accent/10"
+          }`}
+        >
+          {opt.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export default function HomeFeaturedWork() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const filtersRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const hintRef = useRef<HTMLParagraphElement>(null);
+  const introDoneRef = useRef(false);
+  const isInitialCardsRef = useRef(true);
+
+  const [filter, setFilter] = useState<Category>("all");
+  const [reducedMotion, setReducedMotion] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+
+  const display = useMemo(() => {
+    if (filter === "all") {
+      return portfolioItems.filter((p) => p.featured).slice(0, MAX_DISPLAY);
+    }
+
+    return portfolioItems
+      .filter((p) => p.category.includes(filter))
+      .slice(0, MAX_DISPLAY);
+  }, [filter]);
+
+  const displayKey = display.map((p) => p.slug).join(",");
+
+  useLayoutEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReducedMotion(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (reducedMotion) return;
+
+    const section = sectionRef.current;
+    const header = headerRef.current;
+    const filters = filtersRef.current;
+
+    if (!section || !header || !filters || introDoneRef.current) return;
+
+    const ctx = gsap.context(() => {
+      const headerBits = header.querySelectorAll("[data-reveal]");
+      const filterButtons = filters.querySelectorAll("button");
+
+      gsap.set(headerBits, { opacity: 0, y: 20 });
+      gsap.set(filterButtons, { opacity: 0, y: 20 });
+
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: section,
+            start: "top 82%",
+            once: true,
+          },
+        })
+        .to(headerBits, {
+          opacity: 1,
+          y: 0,
+          duration: 0.55,
+          stagger: 0.08,
+          ease: "power2.out",
+        })
+        .to(
+          filterButtons,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.4,
+            stagger: 0.04,
+            ease: "power2.out",
+          },
+          "-=0.25",
         );
 
-  const display =
-    filtered.length > 0
-      ? filtered.slice(0, 3)
-      : portfolioItems.filter((p) => p.featured).slice(0, 3);
+      introDoneRef.current = true;
+    }, section);
+
+    return () => ctx.revert();
+  }, [reducedMotion]);
+
+  useLayoutEffect(() => {
+    if (reducedMotion) return;
+
+    const section = sectionRef.current;
+    const viewport = viewportRef.current;
+    const track = trackRef.current;
+
+    if (!section || !viewport || !track) return;
+
+    let reelTrigger: ScrollTrigger | null = null;
+    let reelTween: gsap.core.Tween | null = null;
+
+    const killReel = () => {
+      reelTrigger?.kill();
+      reelTween?.kill();
+      reelTrigger = null;
+      reelTween = null;
+    };
+
+    const ctx = gsap.context(() => {
+      const getScrollDistance = () =>
+        Math.max(0, track.scrollWidth - viewport.clientWidth);
+
+      const getEndDistance = (distance: number) => {
+        const viewH = window.innerHeight - PIN_OFFSET;
+        return Math.max(distance + viewH * 0.25, viewH * 0.75);
+      };
+
+      const buildReel = () => {
+        killReel();
+
+        gsap.set(track, { x: 0, clearProps: "transform" });
+        gsap.set(track.querySelectorAll("[data-project-card]"), {
+          clearProps:
+            "transform,opacity,visibility,position,top,left,width,height",
+        });
+
+        const cards = gsap.utils.toArray<HTMLElement>(
+          "[data-project-card]",
+          track,
+        );
+        if (!cards.length) {
+          ScrollTrigger.refresh(true);
+          return;
+        }
+
+        gsap.set(cards, { opacity: 1, y: 0 });
+
+        if (isInitialCardsRef.current) {
+          isInitialCardsRef.current = false;
+          gsap.fromTo(
+            cards,
+            { opacity: 0, y: 18 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.45,
+              stagger: 0.07,
+              ease: "power2.out",
+              overwrite: true,
+            },
+          );
+        }
+
+        const distance = getScrollDistance();
+        if (distance < 40 || cards.length < 2) {
+          ScrollTrigger.refresh(true);
+          return;
+        }
+
+        const scrub = window.innerWidth < 1024 ? 0.9 : 0.75;
+        const endDistance = getEndDistance(distance);
+
+        reelTween = gsap.to(track, {
+          x: -distance,
+          ease: "none",
+        });
+
+        reelTrigger = ScrollTrigger.create({
+          trigger: section,
+          start: `top top+=${PIN_OFFSET}`,
+          end: () => `+=${endDistance}`,
+          scrub,
+          pin: section,
+          pinSpacing: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          animation: reelTween,
+          onUpdate(self) {
+            if (hintRef.current) {
+              gsap.set(hintRef.current, {
+                opacity: 0.45 * (1 - Math.min(self.progress / 0.15, 1)),
+              });
+            }
+          },
+        });
+
+        ScrollTrigger.refresh(true);
+      };
+
+      const scheduleBuild = () => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(buildReel);
+        });
+      };
+
+      scheduleBuild();
+
+      const onResize = () => scheduleBuild();
+      window.addEventListener("resize", onResize);
+
+      return () => {
+        window.removeEventListener("resize", onResize);
+        killReel();
+      };
+    }, section);
+
+    return () => {
+      killReel();
+      ctx.revert();
+    };
+  }, [displayKey, reducedMotion]);
 
   return (
-    <section id="work" className="py-20 md:py-28 border-b border-border/50 scroll-mt-24">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
+    <section
+      ref={sectionRef}
+      id="work"
+      className="relative py-20 md:py-28 border-b border-border/50 scroll-mt-24 bg-background"
+    >
+      <div className="site-container">
+        <div
+          ref={headerRef}
+          className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8 md:mb-10"
+        >
           <div className="max-w-2xl">
-            <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-2">
+            <p
+              data-reveal
+              className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-2"
+            >
               Proof in the work
             </p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-balance">
+            <h2
+              data-reveal
+              className="text-3xl sm:text-4xl md:text-5xl 2xl:text-6xl 3xl:text-7xl font-extrabold tracking-tight text-balance"
+            >
               Products clients hired us to ship
             </h2>
-            <p className="mt-4 text-foreground/60 leading-relaxed">
+            <p
+              data-reveal
+              className="mt-4 text-foreground/60 leading-relaxed text-sm sm:text-base 2xl:text-lg"
+            >
               Real case studies across mobile, web, design, and commerce — each
               with its own discipline and stack.
             </p>
           </div>
           <Link
+            data-reveal
             href="/work"
             className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline shrink-0"
           >
@@ -57,62 +351,37 @@ export default function HomeFeaturedWork() {
           </Link>
         </div>
 
-        <div className="flex flex-wrap gap-2 mb-8">
-          {filterOptions.map((opt) => (
-            <button
-              key={opt.value}
-              type="button"
-              onClick={() => setFilter(opt.value)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-                filter === opt.value
-                  ? "bg-primary text-primary-foreground"
-                  : "border border-border bg-card text-foreground/70 hover:bg-accent/10"
-              }`}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {display.map((project) => (
-            <Link
-              key={project.slug}
-              href={`/work/${project.slug}`}
-              className="group flex flex-col rounded-2xl border border-border bg-card overflow-hidden hover:shadow-lg hover:border-primary/20 transition-all duration-300"
-            >
-              <div className="relative aspect-[16/11] bg-muted overflow-hidden">
-                <Image
-                  src={project.image}
-                  alt={project.groupTitle}
-                  fill
-                  className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-                <span className="absolute top-3 left-3 rounded-full bg-background/90 backdrop-blur px-3 py-1 text-xs font-semibold border border-border">
-                  {disciplineLabels[project.discipline]}
-                </span>
+        {reducedMotion ? (
+          <>
+            <FilterPills
+              filter={filter}
+              onChange={setFilter}
+              className="mb-8 md:mb-10"
+            />
+            <div className="featured-work-grid--static">
+              {display.map((project) => (
+                <ProjectCard key={project.slug} project={project} />
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <div ref={filtersRef} className="featured-work-filters">
+              <FilterPills filter={filter} onChange={setFilter} />
+            </div>
+            <div ref={viewportRef} className="featured-work-viewport">
+              <div ref={trackRef} className="featured-work-track">
+                {display.map((project) => (
+                  <ProjectCard key={project.slug} project={project} />
+                ))}
               </div>
-              <div className="p-5 flex flex-1 flex-col gap-3">
-                <h3 className="text-lg font-bold group-hover:text-primary transition-colors">
-                  {project.groupTitle}
-                </h3>
-                <p className="text-sm text-foreground/60 line-clamp-2 leading-relaxed flex-1">
-                  {project.description}
-                </p>
-                <TechBadgeList
-                  items={project.tags.slice(0, 3)}
-                  size="sm"
-                  variant="muted"
-                />
-                <span className="text-sm font-medium text-primary inline-flex items-center gap-1">
-                  Case study
-                  <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
+            </div>
+            <p ref={hintRef} className="featured-work-scroll-hint">
+              Scroll to explore
+              <ArrowRight className="size-3.5" aria-hidden />
+            </p>
+          </>
+        )}
       </div>
     </section>
   );

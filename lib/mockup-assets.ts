@@ -1,5 +1,6 @@
 import type { MockupType } from "@/lib/portfolio-data";
-import type { ProjectScreen, ScreenVariant } from "@/lib/project-details-data";
+
+export type ScreenVariant = "browser" | "mobile" | "figma";
 
 /** Drop your device bezels here (PNG with transparent screen area). */
 export const MOCKUP_FRAMES = {
@@ -47,11 +48,34 @@ export function projectScreens(
   slug: string,
   pages: { file: string; title: string; description: string }[],
   variant: ScreenVariant = "browser",
-): ProjectScreen[] {
+): {
+  title: string;
+  description: string;
+  image: string;
+  variant?: ScreenVariant;
+}[] {
   return pages.map((page) => ({
     title: page.title,
     description: page.description,
     image: screenImage(slug, page.file),
+    variant,
+  }));
+}
+
+/** Use when screenshots live under /mockups/… rather than /mockups/screens/{slug}/ */
+export function projectScreensFromAssets(
+  pages: { image: string; title: string; description: string }[],
+  variant: ScreenVariant = "browser",
+): {
+  title: string;
+  description: string;
+  image: string;
+  variant?: ScreenVariant;
+}[] {
+  return pages.map((page) => ({
+    title: page.title,
+    description: page.description,
+    image: page.image,
     variant,
   }));
 }

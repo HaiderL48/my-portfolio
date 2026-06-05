@@ -1,5 +1,6 @@
 export const servicesHubLanding = {
-  headline: "Everything you need to launch and grow online",
+  headline: "Everything you need to launch",
+  headlineLine2: "and grow online",
   subheadline:
     "Web, e-commerce, mobile, design, CMS, and cloud — one partner from strategy through launch. Pick a service below or tell me your goal and I will map the right path.",
   heroHighlights: [

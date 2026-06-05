@@ -37,7 +37,7 @@ export default function WorkListing() {
     <>
       {featured && (
         <section className="pb-12 md:pb-16 border-b border-border/50">
-          <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+          <div className="site-container">
             <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-4">
               Featured project
             </p>
@@ -76,7 +76,7 @@ export default function WorkListing() {
       )}
 
       <section className="py-10 md:py-12 border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+        <div className="site-container">
           <div className="flex flex-wrap gap-2 justify-center">
             {filterOptions.map((opt) => (
               <button
@@ -97,7 +97,7 @@ export default function WorkListing() {
       </section>
 
       <section className="py-12 md:py-16">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+        <div className="site-container">
           {gridItems.length === 0 ? (
             <p className="text-center text-foreground/60 py-16">
               No projects in this category yet.
@@ -143,7 +143,7 @@ export default function WorkListing() {
       </section>
 
       <section className="py-16 md:py-20 bg-muted/30 border-t border-border/50">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 text-center">
+        <div className="site-container text-center">
           <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight">
             Want results like these?
           </h2>

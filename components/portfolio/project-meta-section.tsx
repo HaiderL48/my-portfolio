@@ -154,7 +154,7 @@ export default function ProjectMetaSection({
         className,
       )}
     >
-      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+      <div className="site-container">
         <MetaSectionHeader />
         <Content items={items} />
       </div>

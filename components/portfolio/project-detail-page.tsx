@@ -5,15 +5,17 @@ import {
   categories,
   disciplineLabels,
   getAdjacentProjects,
-  getConnectedProjects,
-  getRelatedProjects,
+  getDetailRelatedProjects,
+  getExploreMoreProjects,
   getServiceSlugForDiscipline,
   type PortfolioItem,
 } from "@/lib/portfolio-data";
 import { getProjectDetail } from "@/lib/project-details-data";
+import { projectScreensFromAssets } from "@/lib/mockup-assets";
 import RelatedProjectsGrid from "@/components/portfolio/related-projects-grid";
-import ConnectedProjectsSection from "@/components/portfolio/connected-projects-section";
+import ProjectRelatedSection from "@/components/portfolio/project-related-section";
 import ProjectNavigation from "@/components/portfolio/project-navigation";
+import ProjectDetailMotion from "@/components/portfolio/project-detail-motion";
 import {
   CaseStudySection,
   ProjectObjectivesList,
@@ -35,6 +37,26 @@ interface ProjectDetailPageProps {
 }
 
 function buildFallbackDetail(project: PortfolioItem) {
+  const extraImages = [project.webImage, project.mobileImage].filter(
+    (src): src is string => Boolean(src),
+  );
+
+  const featureScreens = projectScreensFromAssets(
+    [
+      {
+        title: "Primary view",
+        description: project.description,
+        image: project.image,
+      },
+      ...extraImages.map((image, i) => ({
+        title: `View ${i + 2}`,
+        description: project.description,
+        image,
+      })),
+    ],
+    project.mockupType === "phone" ? "mobile" : "browser",
+  );
+
   return {
     headline: project.description,
     meta: {
@@ -50,16 +72,7 @@ function buildFallbackDetail(project: PortfolioItem) {
     role: disciplineLabels[project.discipline],
     techStack: project.tags,
     objectives: ["Meet project goals", "Deliver on timeline", "Quality output"],
-    featureScreens: [
-      {
-        title: "Primary view",
-        description: project.description,
-        image: `/mockups/screens/${project.slug}/01.webp`,
-        variant: (project.mockupType === "phone" ? "mobile" : "browser") as
-          | "browser"
-          | "mobile",
-      },
-    ],
+    featureScreens,
     processSteps: [
       { step: "Discover", description: "Goals, scope, and success metrics." },
       { step: "Execute", description: `${disciplineLabels[project.discipline]} delivery.` },
@@ -70,32 +83,33 @@ function buildFallbackDetail(project: PortfolioItem) {
 
 export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
   const detail = getProjectDetail(project.slug) ?? buildFallbackDetail(project);
-  const connected = getConnectedProjects(project);
-  const related = getRelatedProjects(project);
+  const { projects: detailRelated, source: detailRelatedSource } =
+    getDetailRelatedProjects(project);
+  const exploreMore = getExploreMoreProjects(
+    project,
+    detailRelated.map((p) => p.slug),
+  );
   const { prev, next } = getAdjacentProjects(project.slug);
 
   const categoryLabels = project.category
     .filter((c) => c !== "all")
     .map((c) => categories.find((cat) => cat.value === c)?.label ?? c);
 
+  const primaryCategoryLabel = categoryLabels[0];
+
   const serviceSlug = getServiceSlugForDiscipline(project.discipline);
 
-  const galleryImages = [
-    ...new Set(
-      [project.image, project.webImage, project.mobileImage].filter(
-        (src): src is string => Boolean(src),
-      ),
-    ),
-  ].filter((src) => !detail.featureScreens.some((s) => s.image === src));
-
   return (
-    <>
-      <section className="relative pt-28 pb-12 md:pt-32 md:pb-16 border-b border-border/50 overflow-hidden">
+    <ProjectDetailMotion>
+      <section
+        data-project-hero
+        className="relative pt-28 pb-12 md:pt-32 md:pb-16 border-b border-border/50 overflow-hidden"
+      >
         <div
           className="pointer-events-none absolute inset-0 bg-gradient-to-b from-muted/50 via-background to-background"
           aria-hidden
         />
-        <div className="relative max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+        <div className="relative site-container">
           <Link
             href="/work"
             className="text-sm text-foreground/60 hover:text-primary transition-colors"
@@ -104,7 +118,7 @@ export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
           </Link>
 
           <div className="mt-8 space-y-6">
-            <div className="flex flex-wrap items-center gap-2">
+            <div data-hero-item className="flex flex-wrap items-center gap-2">
               <span className="text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full bg-primary text-primary-foreground">
                 {disciplineLabels[project.discipline]}
               </span>
@@ -122,7 +136,7 @@ export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-              <div className="space-y-6 lg:py-4">
+              <div data-hero-item className="space-y-6 lg:py-4">
                 <div>
                   <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-2">
                     Case study
@@ -170,7 +184,7 @@ export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
                 </div>
               </div>
 
-              <div className="flex items-center justify-center w-full">
+              <div data-hero-item className="flex items-center justify-center w-full">
                 <Image
                   src={project.image}
                   alt={project.title}
@@ -186,14 +200,20 @@ export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
         </div>
       </section>
 
-      <ProjectMetaSection
-        meta={detail.meta}
-        role={detail.role}
-        variant={PROJECT_META_VARIANT}
-      />
+      <div data-project-section>
+        <ProjectMetaSection
+          meta={detail.meta}
+          role={detail.role}
+          variant={PROJECT_META_VARIANT}
+        />
+      </div>
 
-      <CaseStudySection eyebrow="Context" title="Project overview">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl">
+      <CaseStudySection
+        data-project-section
+        eyebrow="Context"
+        title="Project overview"
+      >
+        <div data-reveal className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl">
           {detail.overview.map((paragraph, i) => (
             <p
               key={i}
@@ -205,19 +225,19 @@ export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
         </div>
       </CaseStudySection>
 
-      <CaseStudySection eyebrow="Goals" title="Project objectives" className="bg-muted/30">
+      <CaseStudySection eyebrow="Goals" title="Project objectives" className="bg-muted/30" data-project-section>
         <ProjectObjectivesList items={detail.objectives} />
       </CaseStudySection>
 
-      <CaseStudySection eyebrow="Problem & approach" title="Challenge and solution">
+      <CaseStudySection eyebrow="Problem & approach" title="Challenge and solution" data-project-section>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="p-6 md:p-8 rounded-2xl border border-border bg-card">
+          <div data-reveal-card className="p-6 md:p-8 rounded-2xl border border-border bg-card">
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground/50 mb-3">
               Challenge
             </p>
             <p className="text-foreground/70 leading-relaxed">{detail.challenge}</p>
           </div>
-          <div className="p-6 md:p-8 rounded-2xl border border-border bg-card">
+          <div data-reveal-card className="p-6 md:p-8 rounded-2xl border border-border bg-card">
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground/50 mb-3">
               Solution
             </p>
@@ -232,6 +252,7 @@ export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
           eyebrow="Product views"
           title="Pages & key features"
           description="Browse each screen inside the device mockup — use the arrows or page chips to explore the flow."
+          data-project-section
         >
           <ProjectScreenExplorer
             screens={detail.featureScreens}
@@ -242,28 +263,14 @@ export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
         </CaseStudySection>
       )}
 
-      {galleryImages.length > 0 && (
-        <CaseStudySection eyebrow="Gallery" title="Additional views">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {galleryImages.map((src, i) => (
-              <div
-                key={src}
-                className="relative rounded-2xl border border-border bg-muted overflow-hidden aspect-[4/3]"
-              >
-                <Image
-                  src={src}
-                  alt={`${project.groupTitle} view ${i + 1}`}
-                  fill
-                  className="object-cover object-top"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
-            ))}
-          </div>
-        </CaseStudySection>
-      )}
+      <ProjectRelatedSection
+        projects={detailRelated}
+        source={detailRelatedSource}
+        groupTitle={project.groupTitle}
+        categoryLabel={primaryCategoryLabel}
+      />
 
-      <CaseStudySection eyebrow="Delivery" title="Outcomes & deliverables" className="bg-muted/30">
+      <CaseStudySection eyebrow="Delivery" title="Outcomes & deliverables" className="bg-muted/30" data-project-section>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div>
             <h3 className="text-lg font-semibold mb-4">Outcomes</h3>
@@ -295,7 +302,7 @@ export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
         </div>
       </CaseStudySection>
 
-      <CaseStudySection eyebrow="Stack" title="Tools & technologies">
+      <CaseStudySection eyebrow="Stack" title="Tools & technologies" data-project-section>
         <ProjectTechStack items={detail.techStack} />
       </CaseStudySection>
 
@@ -303,29 +310,32 @@ export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
 
       <ProjectTestimonialBlock project={project} />
 
-      <ConnectedProjectsSection
-        projects={connected}
-        groupTitle={project.groupTitle}
-      />
-
       <ProjectNavigation prev={prev} next={next} />
 
-      {related.length > 0 && (
-        <section className="py-16 md:py-24 border-b border-border/50">
-          <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+      {exploreMore.length > 0 && (
+        <section className="py-16 md:py-24 border-b border-border/50" data-project-section>
+          <div className="site-container">
             <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-2">
               Explore more
             </p>
-            <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-8">
+            <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-3">
               Other projects
             </h2>
-            <RelatedProjectsGrid projects={related} />
+            {detailRelatedSource === "connected" && primaryCategoryLabel ? (
+              <p className="text-foreground/60 max-w-2xl leading-relaxed mb-8">
+                More {primaryCategoryLabel.toLowerCase()} work beyond this product
+                family.
+              </p>
+            ) : (
+              <div className="mb-5" />
+            )}
+            <RelatedProjectsGrid projects={exploreMore} />
           </div>
         </section>
       )}
 
-      <section className="py-20 md:py-28 bg-primary text-primary-foreground">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 text-center">
+      <section className="py-20 md:py-28 bg-primary text-primary-foreground" data-project-section>
+        <div className="site-container text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-balance">
             Need {disciplineLabels[project.discipline]} for your product?
           </h2>
@@ -342,6 +352,6 @@ export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
           </a>
         </div>
       </section>
-    </>
+    </ProjectDetailMotion>
   );
 }

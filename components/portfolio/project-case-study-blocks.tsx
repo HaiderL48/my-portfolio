@@ -17,6 +17,7 @@ export function CaseStudySection({
   children,
   className,
   id,
+  ...sectionProps
 }: {
   eyebrow?: string;
   title: string;
@@ -24,13 +25,14 @@ export function CaseStudySection({
   children: ReactNode;
   className?: string;
   id?: string;
-}) {
+} & Omit<React.ComponentPropsWithoutRef<"section">, "children" | "className" | "id">) {
   return (
     <section
       id={id}
       className={cn("py-16 md:py-20 border-b border-border/50", className)}
+      {...sectionProps}
     >
-      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+      <div className="site-container">
         {eyebrow && (
           <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-2">
             {eyebrow}
@@ -56,6 +58,7 @@ export function ProjectObjectivesList({ items }: { items: string[] }) {
       {items.map((item, i) => (
         <li
           key={item}
+          data-reveal-card
           className="p-5 rounded-2xl border border-border bg-card text-sm text-foreground/70 leading-relaxed"
         >
           <span className="text-xs font-bold text-primary mb-2 block">
@@ -206,6 +209,7 @@ export function ProjectProcessSection({
       eyebrow="Process"
       title="How this project ran"
       description="Milestones from kickoff to delivery for this discipline."
+      data-project-section
     >
       <ServiceProcessRoadmap steps={steps} />
     </CaseStudySection>

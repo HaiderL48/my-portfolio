@@ -1,12 +1,14 @@
 "use client";
 
 import Header from "@/components/portfolio/header";
-import Hero from "@/components/portfolio/hero";
+import HeroSolar from "@/components/HeroSolar";
 import HomeTrustBar from "@/components/portfolio/home-trust-bar";
-import Services from "@/components/portfolio/services";
-import ProcessStrip from "@/components/portfolio/process-strip";
+// Archived: full-viewport scroll-stack — kept in components/portfolio/services.tsx
+// import Services from "@/components/portfolio/services";
+import ServicesTwoColumn from "@/components/portfolio/services-two-column";
+// Process story lives in HeroSolar — see components/HeroSolar.jsx
+// import ProcessStrip from "@/components/portfolio/process-strip";
 import HomeFeaturedWork from "@/components/portfolio/home-featured-work";
-import WhyMe from "@/components/portfolio/why-me";
 import TestimonialsSection from "@/components/portfolio/testimonials-section";
 import HomeCta from "@/components/portfolio/home-cta";
 import Footer from "@/components/portfolio/footer";
@@ -15,12 +17,12 @@ export default function Home() {
   return (
     <main className="w-full overflow-x-hidden">
       <Header />
-      <Hero />
+      <HeroSolar />
       <HomeTrustBar />
-      <Services />
-      <ProcessStrip />
+      <ServicesTwoColumn />
+      {/* <Services /> — archived full-viewport stack */}
+      {/* <ProcessStrip /> — covered by HeroSolar process orbits */}
       <HomeFeaturedWork />
-      <WhyMe />
       <TestimonialsSection />
       <HomeCta />
       <Footer />

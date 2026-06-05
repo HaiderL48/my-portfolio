@@ -33,7 +33,7 @@ export const aboutContent = {
     "I'm based in India and work remotely with founders, agencies, and small teams worldwide.",
   ],
   stats: [
-    { value: "15+", label: "Projects shipped" },
+    { value: "20+", label: "Case studies" },
     { value: "6", label: "Service areas" },
     { value: "4+", label: "Years building" },
     { value: "Remote", label: "Worldwide clients" },

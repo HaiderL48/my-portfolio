@@ -1,5 +1,5 @@
-import ServicesHubLanding from "@/components/portfolio/services-hub-landing";
+import ServicesHubAnimated from "@/components/portfolio/services-hub-animated";
 
 export default function ServicesPageContent() {
-  return <ServicesHubLanding />;
+  return <ServicesHubAnimated />;
 }

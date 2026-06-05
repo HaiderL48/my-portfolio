@@ -1,0 +1,41 @@
+.services-hub-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.services-hub-orb--primary {
+  width: min(420px, 55vw);
+  height: min(420px, 55vw);
+  background: color-mix(in oklch, var(--primary) 18%, transparent);
+}
+
+.services-hub-orb--muted {
+  width: min(320px, 45vw);
+  height: min(320px, 45vw);
+  background: color-mix(in oklch, var(--muted-foreground) 12%, transparent);
+}
+
+.services-hub-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in oklch, var(--border) 35%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklch, var(--border) 35%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 20%, transparent 100%);
+}
+
+.services-hub-benefit {
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.services-hub-benefit:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -24px color-mix(in oklch, var(--primary) 35%, transparent);
+}
+
+.services-hub-process-line {
+  transform-origin: left center;
+  transform: scaleX(0);
+}

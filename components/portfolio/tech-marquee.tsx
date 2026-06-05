@@ -35,7 +35,7 @@ export default function TechMarquee({ className = "" }: { className?: string }) 
     <section
       className={`py-12 md:py-16 border-b border-border/50 overflow-hidden ${className}`}
     >
-      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 mb-8 text-center">
+      <div className="site-container mb-8 text-center">
         <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-2">
           Tools & tech
         </p>

@@ -17,7 +17,7 @@ export default function FilterBar({
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 md:py-6">
+    <div className="site-container py-4 md:py-6">
       <div className="flex flex-wrap gap-2 items-center justify-center min-h-[50px]">
         {allFilters.map((filter) => (
           <button

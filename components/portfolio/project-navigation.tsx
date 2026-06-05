@@ -13,7 +13,7 @@ export default function ProjectNavigation({
 
   return (
     <section className="py-12 md:py-16 border-t border-border/50 bg-muted/20">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+      <div className="site-container">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {prev ? (
             <Link

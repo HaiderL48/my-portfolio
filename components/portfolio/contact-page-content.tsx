@@ -7,7 +7,7 @@ export default function ContactPageContent() {
   return (
     <>
       <section className="relative pt-28 pb-12 md:pt-36 md:pb-16 border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+        <div className="site-container">
           <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-foreground/60 mb-2">
             Contact
           </p>
@@ -24,7 +24,7 @@ export default function ContactPageContent() {
       </section>
 
       <section className="py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+        <div className="site-container grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           <div className="lg:col-span-7">
             <ContactForm />
           </div>
