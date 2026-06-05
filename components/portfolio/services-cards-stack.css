@@ -1,0 +1,52 @@
+.services-intro {
+  will-change: transform;
+}
+
+.services-stack-wrapper {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  .services-stack-wrapper {
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+  }
+}
+
+.services-stack-cards {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.services-card-wrapper {
+  width: 100%;
+  perspective: 800px;
+  margin-bottom: 3rem;
+}
+
+.services-card-wrapper:last-child {
+  margin-bottom: 0;
+}
+
+.services-card {
+  width: 100%;
+  transform-origin: top center;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .services-card-wrapper {
+    perspective: none;
+    margin-bottom: 1.5rem;
+  }
+
+  .services-card {
+    transform: none !important;
+  }
+}

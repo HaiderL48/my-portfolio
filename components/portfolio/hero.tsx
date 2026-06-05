@@ -1,127 +1,93 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import React from "react";
+import Link from "next/link";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { gsap } from "gsap";
-import { FaWix, FaWordpress } from "react-icons/fa";
-import { IoLogoFigma } from "react-icons/io5";
-import { FaShopify } from "react-icons/fa";
-import { BiLogoGoogleCloud } from "react-icons/bi";
-import { SiZoho } from "react-icons/si";
-import { RiNextjsFill } from "react-icons/ri";
-import { FaFlutter } from "react-icons/fa6";
-import { IoLogoFirebase } from "react-icons/io5";
-import { IoLogoAndroid } from "react-icons/io";
-import { SiGsap } from "react-icons/si";
+import { homeHero } from "@/lib/home-content";
+import HeroBackground from "@/components/portfolio/hero-background";
+import HeroRotatingText from "@/components/portfolio/hero-rotating-text";
+import HeroTechMarquee from "@/components/portfolio/hero-tech-marquee";
 
-interface HeroProps {
-  isLoading: boolean;
-}
-
-type MarqueeItem = {
-  label: string;
-  icon: React.ReactElement;
-};
-
-const marqueeItems: MarqueeItem[] = [
-  { label: "Flutter", icon: <FaFlutter /> },
-  { label: "Next.js", icon: <RiNextjsFill /> },
-  { label: "Shopify", icon: <FaShopify /> },
-  { label: "Android", icon: <IoLogoAndroid /> },
-  { label: "WordPress", icon: <FaWordpress /> },
-  { label: "Wix", icon: <FaWix /> },
-  { label: "Firebase", icon: <IoLogoFirebase /> },
-  { label: "Figma", icon: <IoLogoFigma /> },
-  { label: "Google Cloud", icon: <BiLogoGoogleCloud /> },
-  { label: "Zoho", icon: <SiZoho /> },
-  { label: "GSAP", icon: <SiGsap /> },
-];
-
-export default function Hero({ isLoading }: HeroProps) {
-  const trackRef = useRef<HTMLDivElement>(null);
+export default function Hero() {
+  const rootRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
+    const root = rootRef.current;
+    if (!root) return;
 
-    const animate = () => {
-      const width = track.scrollWidth / 2;
-      gsap.killTweensOf(track);
-      gsap.set(track, { x: 0 });
-      gsap.to(track, {
-        x: -width,
-        ease: "none",
-        duration: 24,
-        repeat: -1,
+    const ctx = gsap.context(() => {
+      gsap.from(".hero-fade", {
+        opacity: 0,
+        y: 20,
+        duration: 0.7,
+        stagger: 0.08,
+        ease: "power3.out",
       });
-    };
+    }, root);
 
-    animate();
-    window.addEventListener("resize", animate);
-
-    return () => {
-      gsap.killTweensOf(track);
-      window.removeEventListener("resize", animate);
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
-    <section className=" bg-background border-b border-border/50 pt-24 pb-16 md:py-24 flex items-center flex-col justify-center overflow-hidden">
-      <div className="w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-16 flex items-center flex-col justify-center">
-        <div className="space-y-6">
-          {isLoading ? (
-            <>
-              <div className="h-16 bg-muted animate-shimmer rounded-lg w-3/4" />
-              <div className="h-8 bg-muted animate-shimmer rounded-lg w-full" />
-              <div className="h-8 bg-muted animate-shimmer rounded-lg w-5/6" />
-            </>
-          ) : (
-            <>
-              <div className="space-y-4 animate-fade-in-up flex flex-col items-center justify-center max-w-5xl  mx-auto">
-                {/* The "Intro" - Smaller, uppercase, and wider tracking for a modern feel */}
-                {/* Top Label */}
-                {/* <p className="text-md uppercase text-foreground mb-4">
-                  Hi! I'm Haider Limdiwala
-                </p> */}
+    <section
+      ref={rootRef}
+      className="relative flex flex-col justify-center border-b border-border/50 overflow-hidden pt-24 pb-16 md:pt-28 md:pb-20"
+    >
+      <HeroBackground />
 
-                {/* The Big Header */}
-                <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-bold leading-[1.3] text-center tracking-tighter">
-                  Your Partner for <br /> Custom Web & App Development.
-                </h1>
+      <div className="relative z-10 w-full max-w-3xl mx-auto px-4 md:px-8 flex flex-col items-center text-center">
+        <p className="hero-fade text-[11px] sm:text-xs font-medium uppercase tracking-[0.22em] text-foreground/50">
+          {homeHero.badge}
+        </p>
 
-                {/* The Description */}
-                <p className="mt-0 text-[13px] sm:text-[14px] min-[1440px]:text-[16px] leading-relaxed text-foreground/60 text-center max-[991px]:[&>br]:hidden max-w-lg md:max-w-xl lg:max-w-2xl">
-                  Specialized in creating seamless digital experiences across
-                  Shopify, WordPress, and Wix. From intuitive UI/UX design to
-                  robust mobile app development, I provide end-to-end technical
-                  expertise to help brands stand out and sell more online.
-                </p>
-                <div className="flex justify-center pt-6">
-                  <a
-                    href="#contact"
-                    className="inline-flex items-center justify-center rounded-2xl bg-primary px-8 py-4 text-sm font-semibold text-primary-foreground shadow-lg transition hover:bg-primary/90"
-                  >
-                    Hire an Expert
-                  </a>
-                </div>
+        <div className="hero-fade mt-5 space-y-4 w-full">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold leading-[1.15] tracking-tight text-balance">
+            {homeHero.headline}
+            <span className="block text-foreground/65 font-normal text-xl sm:text-2xl md:text-[1.75rem] mt-2">
+              {homeHero.headlineSuffix}
+            </span>
+          </h1>
 
-                <div className="mt-10 marquee-container overflow-hidden ">
-                  <div className="marquee w-sm sm:w-xl md:w-2xl lg:w-4xl ">
-                    <div className="marquee-track flex gap-5" ref={trackRef}>
-                      {[...marqueeItems, ...marqueeItems].map((item, index) => (
-                        <div key={`${item.label}-${index}`} className="p-2 md:p-3 lg:p-4 rounded-xl bg-accent-foreground dark:bg-accent text-2xl md:text-2xl lg:text-3xl">
-                          {item.icon}
-                          {/* <span>{item.label}</span> */}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
+          <HeroRotatingText
+            phrases={homeHero.rotatingServices}
+            centered
+          />
+
+          <p className="text-sm sm:text-base text-foreground/60 leading-relaxed max-w-xl mx-auto">
+            {homeHero.subheadline}
+          </p>
         </div>
+
+        <div className="hero-fade mt-8 flex flex-col sm:flex-row gap-3 justify-center w-full">
+          <Link
+            href="/contact"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-7 py-3.5 text-sm font-medium text-primary-foreground shadow-md transition hover:bg-primary/90"
+          >
+            Start a project
+            <ArrowRight className="size-4" />
+          </Link>
+          <Link
+            href="/work"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-medium text-foreground/75 transition hover:bg-muted/80"
+          >
+            View work
+          </Link>
+        </div>
+
+        <HeroTechMarquee />
       </div>
+
+      <a
+        href="#services"
+        className="hero-fade absolute bottom-5 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-0.5 text-foreground/40 hover:text-primary transition-colors"
+        aria-label="Scroll to services"
+      >
+        <span className="text-[10px] font-medium uppercase tracking-widest">
+          Explore
+        </span>
+        <ChevronDown className="size-4 animate-bounce" />
+      </a>
     </section>
   );
 }

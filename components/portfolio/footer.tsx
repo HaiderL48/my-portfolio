@@ -1,6 +1,8 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
-    <footer id="contact" className="border-t border-border bg-background mt-0">
+    <footer className="border-t border-border bg-background mt-0">
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-20 md:py-32">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16">
           {/* CTA Section */}
@@ -50,22 +52,33 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Section */}
-        <div className="border-t border-border mt-16 md:mt-24 pt-8 md:pt-12 flex flex-col md:flex-row items-center justify-center gap-6">
-          <p className="text-sm text-foreground/50">
-            © 2026 Haider Portfolio. All rights reserved.
+        <nav
+          className="flex flex-wrap justify-center gap-6 md:gap-8 text-sm text-foreground/60"
+          aria-label="Footer"
+        >
+          <Link href="/work" className="hover:text-foreground transition-colors">
+            Work
+          </Link>
+          <Link href="/services" className="hover:text-foreground transition-colors">
+            Services
+          </Link>
+          <Link href="/about" className="hover:text-foreground transition-colors">
+            About
+          </Link>
+          <Link href="/contact" className="hover:text-foreground transition-colors">
+            Contact
+          </Link>
+        </nav>
+
+        <div className="border-t border-border mt-12 md:mt-16 pt-8 md:pt-12 flex flex-col md:flex-row items-center justify-between gap-6">
+          <p className="text-sm text-foreground/50 text-center md:text-left">
+            © 2026 Haider Limdiwala. From Figma to go-live.
           </p>
-          {/* <div className="flex gap-6 md:gap-8">
-            {["Twitter", "LinkedIn", "GitHub", "Dribbble"].map((social) => (
-              <a
-                key={social}
-                href="#"
-                className="text-sm text-foreground/60 hover:text-foreground transition-colors"
-              >
-                {social}
-              </a>
-            ))}
-          </div> */}
+          <p className="text-sm text-foreground/50">
+            <Link href="/contact" className="hover:text-primary transition-colors">
+              Get in touch →
+            </Link>
+          </p>
         </div>
       </div>
     </footer>

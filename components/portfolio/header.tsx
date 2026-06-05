@@ -49,7 +49,7 @@ export default function Header() {
             {/* <div className="w-12  rounded-full flex items-center justify-center">
              <img src="haider-avatar.webp" alt="" />
             </div> */}
-            <a href="#">
+            <a href="/">
             <span className="cursor-pointer font-semibold text-lg tracking-tight">
               Haider Limdiwala
             </span>
@@ -58,19 +58,25 @@ export default function Header() {
 
           <div className="hidden md:flex items-center gap-8">
             <a
-              href="#work"
+              href="/work"
               className="text-sm text-foreground/70 hover:text-foreground transition-colors"
             >
               Work
             </a>
             <a
-              href="#services"
+              href="/services"
               className="text-sm text-foreground/70 hover:text-foreground transition-colors"
             >
-              Service
+              Services
             </a>
             <a
-              href="#"
+              href="/about"
+              className="text-sm text-foreground/70 hover:text-foreground transition-colors"
+            >
+              About
+            </a>
+            <a
+              href="/contact"
               className="text-sm text-foreground/70 hover:text-foreground transition-colors"
             >
               Contact
@@ -80,10 +86,10 @@ export default function Header() {
           <div className="flex items-center gap-2 md:gap-3">
             <ThemeToggle />
             <a
-              href="#contact"
+              href="/contact"
               className="px-3 py-1.5 md:px-4 md:py-2 rounded-xl text-xs md:text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors whitespace-nowrap"
             >
-              Get in Touch
+              Hire me
             </a>
           </div>
         </div>

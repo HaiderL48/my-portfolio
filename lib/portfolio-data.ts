@@ -6,17 +6,47 @@ export type Category =
   | "shopify"
   | "wix"
   | "all";
+
 export type MockupType = "browser" | "phone" | "tablet" | "desktop";
+
+export type ProjectDiscipline =
+  | "figma"
+  | "flutter"
+  | "web"
+  | "react"
+  | "shopify"
+  | "wordpress"
+  | "wix"
+  | "laravel"
+  | "admin"
+  | "gsap";
+
+export const disciplineLabels: Record<ProjectDiscipline, string> = {
+  figma: "Figma UI/UX",
+  flutter: "Flutter App",
+  web: "Web Development",
+  react: "React / TypeScript",
+  shopify: "Shopify",
+  wordpress: "WordPress",
+  wix: "Wix",
+  laravel: "Laravel",
+  admin: "Admin Panel",
+  gsap: "GSAP & React",
+};
 
 export interface Testimonial {
   text: string;
   author: string;
   role: string;
-  image: string;
+  image?: string;
 }
 
 export interface PortfolioItem {
   id: string;
+  slug: string;
+  groupId: string;
+  groupTitle: string;
+  discipline: ProjectDiscipline;
   title: string;
   description: string;
   category: Category[];
@@ -54,126 +84,169 @@ const BASE = "/mockups";
 export const portfolioItems: PortfolioItem[] = [
   {
     id: "0",
-    title: "Real Estate",
-    description: "Modern online shopping experience with seamless checkout flow, advanced filtering, and real-time inventory management. Built with React and Node.js for optimal performance.",
+    slug: "real-estate-wordpress",
+    groupId: "real-estate",
+    groupTitle: "Real Estate",
+    discipline: "wordpress",
+    title: "Real Estate — WordPress",
+    description:
+      "Property listing website on WordPress with enquiry flows, mobile-friendly listings, and an admin the client team can update daily.",
     category: ["wordpress"],
     image: `${BASE}/alliancebayrealtygroup.webp`,
-    tags: ["Wordpress"],
+    tags: ["WordPress", "PHP", "Listings"],
     mockupType: "browser",
     accentColor: "#2563eb",
     featured: true,
-    testimonial: {
-      text: "The platform increased our sales by 40% in the first month. Exceptional work!",
-      author: "Sarah Johnson",
-      role: "E-Commerce Manager",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop",
-    },
   },
   {
     id: "1",
-    title: "Animated Website",
-    description: "Modern Animated Website based on popular Anime Jujutsu Kaisen. Made with stuning Animations and Music.",
+    slug: "animated-website",
+    groupId: "animated-website",
+    groupTitle: "Animated Website",
+    discipline: "gsap",
+    title: "Animated Website — React & GSAP",
+    description:
+      "Cinematic anime-inspired one-pager with scroll-driven GSAP animation, React, and Tailwind CSS.",
     category: ["web"],
     image: `${BASE}/gojo-vs-sukuna.webp`,
-    tags: ["React","GSAP","Tailwind CSS"],
+    tags: ["React", "GSAP", "Tailwind CSS"],
     mockupType: "browser",
     accentColor: "#2563eb",
     featured: true,
-    testimonial: {
-      text: "The platform increased our sales by 40% in the first month. Exceptional work!",
-      author: "Sarah Johnson",
-      role: "E-Commerce Manager",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop",
-    },
   },
   {
     id: "2",
-    title: "Dating App",
-    description: "Comprehensive mobile app to track workouts, monitor calories, and visualize progress with AI-powered insights. Real-time syncing across all devices.",
+    slug: "dating-app-figma",
+    groupId: "dating-app",
+    groupTitle: "Dating App",
+    discipline: "figma",
+    title: "Dating App — Figma UI",
+    description:
+      "Mobile UI/UX in Figma: onboarding, profiles, discovery, and chat entry — focused on trust and clarity.",
     category: ["uiux"],
     image: `${BASE}/dating.webp`,
-    tags: ["Figma", "UI/UX", "Web Designing"],
+    tags: ["Figma", "UI/UX", "Mobile"],
     mockupType: "phone",
     accentColor: "#9333ea",
     featured: true,
-    testimonial: {
-      text: "Amazing app design and functionality. My team loves using it for fitness tracking.",
-      author: "Mike Chen",
-      role: "Fitness Director",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop",
-    },
   },
   {
     id: "3",
-    title: "Laravel Dashboard",
-    description: "Analytics dashboard with real-time data visualization, custom charts, and interactive insights. Complete design system with 100+ components.",
+    slug: "laravel-dashboard",
+    groupId: "laravel-dashboard",
+    groupTitle: "Laravel Dashboard",
+    discipline: "laravel",
+    title: "Laravel Dashboard — Web App",
+    description:
+      "Analytics dashboard with real-time charts, filterable tables, and reusable UI modules on Laravel.",
     category: ["web"],
     image: `${BASE}/dashboard.webp`,
-    tags: ["Laravel", "PHP", "HTML/CSS"],
+    tags: ["Laravel", "PHP", "Dashboard"],
     mockupType: "browser",
     accentColor: "#ec4899",
     featured: true,
-    testimonial: {
-      text: "The design system transformed our entire product. Clean, intuitive, and scalable.",
-      author: "Emma Williams",
-      role: "Product Lead",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop",
-    },
   },
   {
-    id: "4",
-    title: "Food App",
-    description: "WordPress blog with custom theme, advanced SEO optimization, and integrated newsletter subscription. Built for content creators and marketers.",
-    category: ["app", "uiux"],
+    id: "4a",
+    slug: "food-app-figma",
+    groupId: "food-app",
+    groupTitle: "Food App",
+    discipline: "figma",
+    title: "Food App — Figma Design",
+    description:
+      "Food delivery app UI in Figma: menu browse, item modifiers, cart, and checkout flows for mobile.",
+    category: ["uiux"],
     image: `${BASE}/food.webp`,
-    tags: ["Android", "Flutter", "Figma"],
+    tags: ["Figma", "UI/UX", "Mobile"],
+    mockupType: "phone",
+    accentColor: "#06b6d4",
+  },
+  {
+    id: "4b",
+    slug: "food-app-flutter",
+    groupId: "food-app",
+    groupTitle: "Food App",
+    discipline: "flutter",
+    title: "Food App — Flutter",
+    description:
+      "Flutter implementation of the food ordering experience — screens, navigation, and UI parity with design.",
+    category: ["app"],
+    image: `${BASE}/food.webp`,
+    tags: ["Flutter", "Dart", "Android"],
     mockupType: "phone",
     accentColor: "#06b6d4",
     featured: true,
-    testimonial: {
-      text: "Perfect for our blogging needs. Great SEO and easy to manage content.",
-      author: "David Park",
-      role: "Marketing Director",
-      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop",
-    },
+  },
+  {
+    id: "4c",
+    slug: "food-app-admin",
+    groupId: "food-app",
+    groupTitle: "Food App",
+    discipline: "admin",
+    title: "Food App — Admin Panel",
+    description:
+      "Web admin for restaurants and orders: menu management, order status, and operational dashboards.",
+    category: ["web"],
+    image: `${BASE}/food.webp`,
+    tags: ["Admin Panel", "Web App", "Dashboard"],
+    mockupType: "browser",
+    accentColor: "#06b6d4",
   },
   {
     id: "5",
-    title: "Tour Website",
-    description: "Feature-rich Shopify store with custom product pages, advanced filtering, and seamless checkout integration. Optimized for conversions.",
+    slug: "tour-website-wordpress",
+    groupId: "tour-website",
+    groupTitle: "Tour Website",
+    discipline: "wordpress",
+    title: "Tour Website — WordPress",
+    description:
+      "European tours site with WooCommerce booking, package pages, and editor-friendly WordPress setup.",
     category: ["wordpress"],
     image: `${BASE}/eauropeantours.webp`,
-    tags: ["Wordpress", "Woocommerce"],
+    tags: ["WordPress", "WooCommerce"],
     mockupType: "browser",
     accentColor: "#16a34a",
-    testimonial: {
-      text: "Our Shopify store looks incredible and sells great. Best investment ever!",
-      author: "Lisa Anderson",
-      role: "Store Owner",
-      image: "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=150&h=150&fit=crop",
-    },
   },
   {
     id: "6",
-    title: "IT Solution Design",
-    description: "Creative portfolio website built on Wix with custom elements, smooth animations, and showcase of latest projects. Professional and eye-catching.",
+    slug: "it-solution-figma",
+    groupId: "it-solution",
+    groupTitle: "IT Solution Design",
+    discipline: "figma",
+    title: "IT Solution — Figma UI",
+    description:
+      "B2B IT services marketing UI in Figma — services, trust sections, and lead-capture layouts.",
     category: ["uiux"],
     image: `${BASE}/RajIt.webp`,
-    tags: ["Figma", "Web Design", "UI/UX"],
+    tags: ["Figma", "Web Design", "B2B"],
     mockupType: "browser",
     accentColor: "#ea580c",
-    testimonial: {
-      text: "My Wix portfolio helped me land three major clients. Highly recommended!",
-      author: "James Rodriguez",
-      role: "Creative Director",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop",
-    },
   },
   {
-    id: "7",
-    title: "Rent App",
-    description: "Enterprise dashboard for team collaboration, project management, and real-time communication. Built with TypeScript for type safety.",
+    id: "7a",
+    slug: "rent-app-figma",
+    groupId: "rent-app",
+    groupTitle: "Rent App",
+    discipline: "figma",
+    title: "Rent App — Figma UX",
+    description:
+      "Rental marketplace UX in Figma: search, listings, property detail, and renter/host dashboards.",
     category: ["uiux"],
+    image: `${BASE}/rent.webp`,
+    tags: ["Figma", "UX", "SaaS"],
+    mockupType: "browser",
+    accentColor: "#2563eb",
+  },
+  {
+    id: "7b",
+    slug: "rent-app-web",
+    groupId: "rent-app",
+    groupTitle: "Rent App",
+    discipline: "react",
+    title: "Rent App — React Web",
+    description:
+      "React + TypeScript front end for listings, filters, and account areas aligned with Figma specs.",
+    category: ["web"],
     image: `${BASE}/rent.webp`,
     tags: ["React", "TypeScript", "SaaS"],
     mockupType: "browser",
@@ -181,32 +254,142 @@ export const portfolioItems: PortfolioItem[] = [
   },
   {
     id: "8",
-    title: "Restaurant App",
-    description: "Secure banking application with transaction management, biometric authentication, and detailed financial analytics.",
-    category: ["app", "uiux"],
+    slug: "restaurant-app-figma",
+    groupId: "restaurant-app",
+    groupTitle: "Restaurant App",
+    discipline: "figma",
+    title: "Restaurant App — Figma UI",
+    description:
+      "Restaurant ordering UI: menu categories, modifiers, cart bar, and checkout on mobile.",
+    category: ["uiux"],
     image: `${BASE}/restaurant.webp`,
-    tags: ["React Native", "Security", "Finance"],
+    tags: ["Figma", "Mobile UI", "Hospitality"],
     mockupType: "phone",
     accentColor: "#9333ea",
   },
   {
-    id: "9",
-    title: "IT Website",
-    description: "Complete UI/UX design system for mobile platform with 150+ components, comprehensive documentation, and design tokens.",
-    category: ["uiux", "wix", "web"],
+    id: "9a",
+    slug: "it-website-figma",
+    groupId: "it-website",
+    groupTitle: "IT Website",
+    discipline: "figma",
+    title: "IT Website — Figma Design",
+    description:
+      "Marketing site designs in Figma for an IT brand — desktop and mobile frames.",
+    category: ["uiux"],
     image: `${BASE}/serourdesigns.webp`,
-    tags: ["Figma", "Wix", "Web Design"],
+    tags: ["Figma", "Web Design"],
+    mockupType: "browser",
+    accentColor: "#ec4899",
+  },
+  {
+    id: "9b",
+    slug: "it-website-wix",
+    groupId: "it-website",
+    groupTitle: "IT Website",
+    discipline: "wix",
+    title: "IT Website — Wix Build",
+    description:
+      "Figma designs implemented on Wix with custom sections and responsive tuning.",
+    category: ["wix", "web"],
+    image: `${BASE}/serourdesigns.webp`,
+    tags: ["Wix", "Implementation"],
     mockupType: "phone",
     accentColor: "#ec4899",
   },
   {
     id: "10",
-    title: "Mackup Website",
-    description: "WordPress news site with custom post types, advanced filtering, and integrated breaking news alerts. SEO-optimized.",
+    slug: "mackup-shopify",
+    groupId: "mackup-website",
+    groupTitle: "Mackup Website",
+    discipline: "shopify",
+    title: "Mackup Website — Shopify",
+    description:
+      "Shopify apparel store with custom sections, product templates, and mobile checkout UX.",
     category: ["shopify", "web"],
     image: `${BASE}/shopaarel.webp`,
-    tags: ["Shopify", "E-Commerce", "Liquid"],
+    tags: ["Shopify", "Liquid", "E-Commerce"],
     mockupType: "browser",
     accentColor: "#06b6d4",
   },
 ];
+
+export const projectSlugs = portfolioItems.map((p) => p.slug);
+
+export function getProjectBySlug(slug: string): PortfolioItem | undefined {
+  return portfolioItems.find((p) => p.slug === slug);
+}
+
+export function getAdjacentProjects(slug: string): {
+  prev?: PortfolioItem;
+  next?: PortfolioItem;
+} {
+  const index = portfolioItems.findIndex((p) => p.slug === slug);
+  if (index === -1) return {};
+  return {
+    prev: index > 0 ? portfolioItems[index - 1] : undefined,
+    next:
+      index < portfolioItems.length - 1
+        ? portfolioItems[index + 1]
+        : undefined,
+  };
+}
+
+export function getConnectedProjects(project: PortfolioItem): PortfolioItem[] {
+  return portfolioItems.filter(
+    (p) => p.groupId === project.groupId && p.slug !== project.slug,
+  );
+}
+
+export function getProjectsByGroup(groupId: string): PortfolioItem[] {
+  return portfolioItems.filter((p) => p.groupId === groupId);
+}
+
+export function getRelatedProjects(
+  project: PortfolioItem,
+  limit = 3,
+): PortfolioItem[] {
+  return portfolioItems
+    .filter(
+      (p) =>
+        p.groupId !== project.groupId &&
+        p.category.some((cat) => project.category.includes(cat)),
+    )
+    .slice(0, limit);
+}
+
+const categoryServiceMap: Partial<
+  Record<Exclude<Category, "all">, string>
+> = {
+  web: "web-development",
+  app: "mobile-apps",
+  uiux: "ui-ux-design",
+  wordpress: "cms-integration",
+  shopify: "e-commerce",
+  wix: "cms-integration",
+};
+
+const disciplineServiceMap: Partial<Record<ProjectDiscipline, string>> = {
+  figma: "ui-ux-design",
+  flutter: "mobile-apps",
+  web: "web-development",
+  react: "web-development",
+  shopify: "e-commerce",
+  wordpress: "cms-integration",
+  wix: "cms-integration",
+  laravel: "web-development",
+  admin: "web-development",
+  gsap: "web-development",
+};
+
+export function getServiceSlugForCategory(
+  category: Exclude<Category, "all">,
+): string | undefined {
+  return categoryServiceMap[category];
+}
+
+export function getServiceSlugForDiscipline(
+  discipline: ProjectDiscipline,
+): string | undefined {
+  return disciplineServiceMap[discipline];
+}
