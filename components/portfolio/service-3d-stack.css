@@ -1,0 +1,242 @@
+.service-3d-stack {
+  --s3d-bg: #d4d1c7;
+  --s3d-dark: #1a1814;
+  --s3d-text: #1a1814;
+  --s3d-muted: #6b6860;
+  --s3d-serif: var(--font-service-serif, "Playfair Display", Georgia, serif);
+  --s3d-sans: var(--font-service-sans, "DM Sans", sans-serif);
+  --s3d-mono: var(--font-service-mono, "DM Mono", monospace);
+
+  background: var(--s3d-bg);
+  font-family: var(--s3d-sans);
+  color: var(--s3d-text);
+}
+
+.service-3d-stack__scroll {
+  position: relative;
+  height: 250vh;
+}
+
+.service-3d-stack__scene {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.service-3d-stack__inner {
+  width: 100%;
+  height: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 80px 60px;
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+/* ─── Vision card (top-left) ─── */
+.service-3d-stack__vision {
+  position: relative;
+  align-self: start;
+  background: var(--s3d-dark);
+  border-radius: 3px;
+  padding: 32px 30px;
+}
+
+.service-3d-stack__vision::before,
+.service-3d-stack__vision::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: rgba(255, 255, 255, 0.18);
+  border-style: solid;
+}
+
+.service-3d-stack__vision::before {
+  top: 8px;
+  left: 8px;
+  border-width: 1px 0 0 1px;
+}
+
+.service-3d-stack__vision::after {
+  bottom: 8px;
+  right: 8px;
+  border-width: 0 1px 1px 0;
+}
+
+.service-3d-stack__vision-label {
+  font-family: var(--s3d-mono);
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 14px;
+}
+
+.service-3d-stack__vision-title {
+  font-family: var(--s3d-serif);
+  font-size: 27px;
+  font-weight: 500;
+  line-height: 1.25;
+  color: #fff;
+  margin-bottom: 16px;
+}
+
+.service-3d-stack__vision-body {
+  font-size: 13px;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 300;
+}
+
+/* ─── Plates (right) — 3D boxes ─── */
+.service-3d-stack__plates {
+  align-self: center;
+  width: 100%;
+  max-width: 620px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  perspective: 1500px;
+  perspective-origin: 50% 50%;
+}
+
+.service-3d-stack__plate {
+  --plate-w: 560px;
+  --plate-h: 132px;
+  --plate-d: 180px;
+  position: relative;
+  width: var(--plate-w);
+  height: var(--plate-h);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.service-3d-stack__box {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.service-3d-stack__face {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  box-sizing: border-box;
+  border: 1px dashed rgba(26, 24, 20, 0.3);
+}
+
+/* Front face: holds the text + solid corner ticks */
+.service-3d-stack__face--front {
+  width: var(--plate-w);
+  height: var(--plate-h);
+  padding: 24px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: rgba(212, 209, 199, 0.18);
+  transform: translate(-50%, -50%) translateZ(calc(var(--plate-d) / 2));
+}
+
+.service-3d-stack__face--back {
+  width: var(--plate-w);
+  height: var(--plate-h);
+  border-style: dotted;
+  border-color: rgba(26, 24, 20, 0.22);
+  transform: translate(-50%, -50%) translateZ(calc(var(--plate-d) / -2));
+}
+
+.service-3d-stack__face--top {
+  width: var(--plate-w);
+  height: var(--plate-d);
+  border-style: dotted;
+  border-color: rgba(26, 24, 20, 0.22);
+  transform: translate(-50%, -50%) rotateX(90deg)
+    translateZ(calc(var(--plate-h) / 2));
+}
+
+.service-3d-stack__face--right {
+  width: var(--plate-d);
+  height: var(--plate-h);
+  border-style: dotted;
+  border-color: rgba(26, 24, 20, 0.22);
+  transform: translate(-50%, -50%) rotateY(90deg)
+    translateZ(calc(var(--plate-w) / 2));
+}
+
+.service-3d-stack__plate-title {
+  font-family: var(--s3d-serif);
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: #1a1814;
+}
+
+.service-3d-stack__plate-sub {
+  margin-top: 4px;
+  font-family: var(--s3d-sans);
+  font-size: 12.5px;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.4;
+  color: #6b6860;
+}
+
+/* Corner ticks on the front face */
+.service-3d-stack__corner {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border: 0 solid rgba(26, 24, 20, 0.5);
+}
+
+.service-3d-stack__corner--tl {
+  top: 5px;
+  left: 5px;
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
+}
+
+.service-3d-stack__corner--tr {
+  top: 5px;
+  right: 5px;
+  border-top-width: 1.5px;
+  border-right-width: 1.5px;
+}
+
+.service-3d-stack__corner--bl {
+  bottom: 5px;
+  left: 5px;
+  border-bottom-width: 1.5px;
+  border-left-width: 1.5px;
+}
+
+.service-3d-stack__corner--br {
+  bottom: 5px;
+  right: 5px;
+  border-bottom-width: 1.5px;
+  border-right-width: 1.5px;
+}
+
+@media (max-width: 1023px) {
+  .service-3d-stack__inner {
+    grid-template-columns: 1fr;
+    padding: 48px 24px;
+    gap: 40px;
+  }
+
+  .service-3d-stack__plates {
+    align-self: start;
+    max-width: none;
+  }
+
+  .service-3d-stack__vision-title {
+    font-size: 24px;
+  }
+}

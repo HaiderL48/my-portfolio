@@ -298,6 +298,15 @@
   flex: 0 0 var(--stepped-card-width);
   width: var(--stepped-card-width);
   height: var(--stepped-card-height);
+  min-height: 0;
+}
+
+.works-stepped-project-name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-wrap: balance;
 }
 
 @media (max-width: 768px) {

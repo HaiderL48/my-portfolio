@@ -79,20 +79,24 @@ function ProjectCell({ project }: { project: PortfolioItem }) {
       href={`/work/${project.slug}`}
       draggable={false}
       onDragStart={(event) => event.preventDefault()}
-      className="works-stepped-cell works-stepped-project group flex items-center justify-center bg-background p-5 md:p-6 hover:bg-accent/5 dark:hover:bg-white/5 transition-colors"
+      className="works-stepped-cell works-stepped-project group flex flex-col bg-background hover:bg-accent/5 dark:hover:bg-white/5 transition-colors"
       title={project.groupTitle}
     >
-      <div className="relative h-full w-full max-h-[85%] max-w-[88%]">
-        <Image
-          src={project.image}
-          alt={project.groupTitle}
-          fill
-          draggable={false}
-          className="pointer-events-none object-contain object-center transition-transform duration-500 group-hover:scale-[1.04] select-none"
-          sizes="(max-width: 768px) 78vw, 480px"
-        />
+      <div className="relative flex min-h-0 flex-1 items-center justify-center p-4 pb-2 md:p-5 md:pb-3">
+        <div className="relative h-full w-full max-h-full max-w-[88%]">
+          <Image
+            src={project.image}
+            alt=""
+            fill
+            draggable={false}
+            className="pointer-events-none object-contain object-center transition-transform duration-500 group-hover:scale-[1.04] select-none"
+            sizes="(max-width: 768px) 78vw, 480px"
+          />
+        </div>
       </div>
-      <span className="sr-only">{project.groupTitle}</span>
+      <p className="works-stepped-project-name shrink-0 px-3 pb-3 text-center text-[11px] font-semibold leading-snug text-foreground/75 transition-colors group-hover:text-primary md:px-4 md:pb-4 md:text-xs">
+        {project.groupTitle}
+      </p>
     </Link>
   );
 }
