@@ -46,11 +46,13 @@ export function TechBadge({
       )}
       title={label}
     >
-      <Icon
-        className={cn("shrink-0", colorClass)}
-        size={styles.icon}
-        aria-hidden
-      />
+      <span suppressHydrationWarning>
+        <Icon
+          className={cn("shrink-0", colorClass)}
+          size={styles.icon}
+          aria-hidden
+        />
+      </span>
       <span className={styles.label}>{label}</span>
     </span>
   );

@@ -13,6 +13,7 @@ import {
   type Category,
 } from "@/lib/portfolio-data";
 import { TechBadgeList } from "@/components/portfolio/tech-badge";
+import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 import "./home-featured-work.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -22,8 +23,28 @@ const filterOptions: { value: Category; label: string }[] = [
   ...categories.map((c) => ({ value: c.value, label: c.label })),
 ];
 
-const MAX_DISPLAY = 6;
-const PIN_OFFSET = 72;
+const MAX_DISPLAY = 10;
+
+function getAllFilterProjects() {
+  const seen = new Set<string>();
+  const rows: (typeof portfolioItems)[number][] = [];
+
+  const addItem = (item: (typeof portfolioItems)[number]) => {
+    if (seen.has(item.groupId) || rows.length >= MAX_DISPLAY) return;
+    seen.add(item.groupId);
+    rows.push(item);
+  };
+
+  portfolioItems.filter((p) => p.featured).forEach(addItem);
+  portfolioItems.forEach(addItem);
+
+  return rows;
+}
+
+function getPinOffset() {
+  const header = document.querySelector("header");
+  return header ? Math.ceil(header.getBoundingClientRect().height) : 64;
+}
 
 function ProjectCard({
   project,
@@ -36,7 +57,7 @@ function ProjectCard({
     <Link
       href={`/work/${project.slug}`}
       data-project-card
-      className={`group featured-work-card flex flex-col rounded-2xl border border-border bg-card overflow-hidden hover:shadow-lg hover:border-primary/20 transition-[box-shadow,border-color] duration-300 ${className}`.trim()}
+      className={`group featured-work-card flex flex-col rounded-2xl border border-border bg-card overflow-hidden hover:border-primary/20 transition-[border-color] duration-300 ${className}`.trim()}
     >
       <div className="relative aspect-[16/11] bg-muted overflow-hidden">
         <Image
@@ -102,6 +123,7 @@ function FilterPills({
 
 export default function HomeFeaturedWork() {
   const sectionRef = useRef<HTMLElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const filtersRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -111,15 +133,11 @@ export default function HomeFeaturedWork() {
   const isInitialCardsRef = useRef(true);
 
   const [filter, setFilter] = useState<Category>("all");
-  const [reducedMotion, setReducedMotion] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-  );
+  const reducedMotion = usePrefersReducedMotion();
 
   const display = useMemo(() => {
     if (filter === "all") {
-      return portfolioItems.filter((p) => p.featured).slice(0, MAX_DISPLAY);
+      return getAllFilterProjects();
     }
 
     return portfolioItems
@@ -130,14 +148,6 @@ export default function HomeFeaturedWork() {
   const displayKey = display.map((p) => p.slug).join(",");
 
   useLayoutEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setReducedMotion(media.matches);
-    sync();
-    media.addEventListener("change", sync);
-    return () => media.removeEventListener("change", sync);
-  }, []);
-
-  useLayoutEffect(() => {
     if (reducedMotion) return;
 
     const section = sectionRef.current;
@@ -145,6 +155,8 @@ export default function HomeFeaturedWork() {
     const filters = filtersRef.current;
 
     if (!section || !header || !filters || introDoneRef.current) return;
+
+    let cancelled = false;
 
     const ctx = gsap.context(() => {
       const headerBits = header.querySelectorAll("[data-reveal]");
@@ -180,20 +192,25 @@ export default function HomeFeaturedWork() {
           "-=0.25",
         );
 
-      introDoneRef.current = true;
+      if (!cancelled) {
+        introDoneRef.current = true;
+      }
     }, section);
 
-    return () => ctx.revert();
+    return () => {
+      cancelled = true;
+      ctx.revert();
+    };
   }, [reducedMotion]);
 
   useLayoutEffect(() => {
     if (reducedMotion) return;
 
-    const section = sectionRef.current;
+    const pinZone = pinRef.current;
     const viewport = viewportRef.current;
     const track = trackRef.current;
 
-    if (!section || !viewport || !track) return;
+    if (!pinZone || !viewport || !track) return;
 
     let reelTrigger: ScrollTrigger | null = null;
     let reelTween: gsap.core.Tween | null = null;
@@ -210,8 +227,9 @@ export default function HomeFeaturedWork() {
         Math.max(0, track.scrollWidth - viewport.clientWidth);
 
       const getEndDistance = (distance: number) => {
-        const viewH = window.innerHeight - PIN_OFFSET;
-        return Math.max(distance + viewH * 0.25, viewH * 0.75);
+        const pinOffset = getPinOffset();
+        const viewH = window.innerHeight - pinOffset;
+        return Math.max(distance + viewH * 0.15, viewH * 0.55);
       };
 
       const buildReel = () => {
@@ -265,11 +283,11 @@ export default function HomeFeaturedWork() {
         });
 
         reelTrigger = ScrollTrigger.create({
-          trigger: section,
-          start: `top top+=${PIN_OFFSET}`,
+          trigger: pinZone,
+          start: () => `top top+=${getPinOffset()}`,
           end: () => `+=${endDistance}`,
           scrub,
-          pin: section,
+          pin: pinZone,
           pinSpacing: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
@@ -301,7 +319,7 @@ export default function HomeFeaturedWork() {
         window.removeEventListener("resize", onResize);
         killReel();
       };
-    }, section);
+    }, pinZone);
 
     return () => {
       killReel();
@@ -313,12 +331,12 @@ export default function HomeFeaturedWork() {
     <section
       ref={sectionRef}
       id="work"
-      className="relative py-20 md:py-28 border-b border-border/50 scroll-mt-24 bg-background"
+      className="relative pt-12 md:pt-16 pb-0 border-b border-border/50 scroll-mt-24 bg-background"
     >
-      <div className="site-container">
+      <div className="site-container pb-6 md:pb-8">
         <div
           ref={headerRef}
-          className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8 md:mb-10"
+          className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6"
         >
           <div className="max-w-2xl">
             <p
@@ -350,22 +368,24 @@ export default function HomeFeaturedWork() {
             <ArrowRight className="size-4" />
           </Link>
         </div>
+      </div>
 
-        {reducedMotion ? (
-          <>
-            <FilterPills
-              filter={filter}
-              onChange={setFilter}
-              className="mb-8 md:mb-10"
-            />
-            <div className="featured-work-grid--static">
-              {display.map((project) => (
-                <ProjectCard key={project.slug} project={project} />
-              ))}
-            </div>
-          </>
-        ) : (
-          <>
+      {reducedMotion ? (
+        <div className="site-container pb-12 md:pb-16">
+          <FilterPills
+            filter={filter}
+            onChange={setFilter}
+            className="mb-8 md:mb-10"
+          />
+          <div className="featured-work-grid--static">
+            {display.map((project) => (
+              <ProjectCard key={project.slug} project={project} />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div ref={pinRef} className="featured-work-pin-zone bg-background">
+          <div className="site-container pb-10 md:pb-12">
             <div ref={filtersRef} className="featured-work-filters">
               <FilterPills filter={filter} onChange={setFilter} />
             </div>
@@ -380,9 +400,9 @@ export default function HomeFeaturedWork() {
               Scroll to explore
               <ArrowRight className="size-3.5" aria-hidden />
             </p>
-          </>
-        )}
-      </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

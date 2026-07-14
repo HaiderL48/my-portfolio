@@ -12,10 +12,10 @@ import {
   Headphones,
   Infinity,
 } from "lucide-react";
+import "./hero-solar.css";
 
 gsap.registerPlugin(useGSAP);
 
-const BG = "#f5f5f3";
 const DEFAULT_PLANET_SIZE = 56;
 const DEFAULT_SUN_SIZE = 96;
 const ORBIT_SCALE_BOOST = 1.14;
@@ -71,7 +71,7 @@ function orbitXY(cx, cy, r, angle, scale) {
   };
 }
 
-function getVisualConfig(width) {
+function getVisualConfig(width, height = 800) {
   if (width < 380) {
     return { planetSize: 40, sunSize: 68, iconSize: 16, labelSize: 8, systemPad: 8 };
   }
@@ -83,6 +83,9 @@ function getVisualConfig(width) {
   }
   if (width < 1024) {
     return { planetSize: 52, sunSize: 88, iconSize: 19, labelSize: 9, systemPad: 11 };
+  }
+  if (width >= 1024 && height >= 680 && height < 900) {
+    return { planetSize: 50, sunSize: 84, iconSize: 18, labelSize: 8, systemPad: 10 };
   }
   if (width < 1536) {
     return {
@@ -110,11 +113,23 @@ function getOrbitScale(width, height, visual) {
   let maxScale =
     width >= 2200 ? 1.42 : width >= 1920 ? 1.32 : width >= 1536 ? 1.18 : 1.08;
 
-  if (height < 860) maxScale = Math.min(maxScale, 0.96);
-  if (height < 760) maxScale = Math.min(maxScale, 0.88);
+  const isLaptopRow = width >= 1024 && height >= 680;
+
+  if (isLaptopRow && height < 900) {
+    maxScale = Math.min(maxScale, 1.02);
+  } else if (height < 860) {
+    maxScale = Math.min(maxScale, 0.96);
+  }
+  if (!isLaptopRow && height < 760) {
+    maxScale = Math.min(maxScale, 0.88);
+  }
 
   const boost =
-    height < 860 && width >= 1024 ? ORBIT_SCALE_BOOST * 0.9 : ORBIT_SCALE_BOOST;
+    isLaptopRow && height < 900
+      ? ORBIT_SCALE_BOOST
+      : height < 860 && width >= 1024
+        ? ORBIT_SCALE_BOOST * 0.9
+        : ORBIT_SCALE_BOOST;
 
   return Math.min(fit, maxScale) * boost;
 }
@@ -138,11 +153,6 @@ function buildOrbitArcPath(
 
   return parts.join(" ");
 }
-
-const sunShellStyle = {
-  border: "1px solid #e0e0e0",
-  boxShadow: "0 4px 24px rgba(0, 0, 0, 0.08)",
-};
 
 const INFINITY_RATIO = 0.56;
 
@@ -192,12 +202,12 @@ function SunCenter({ size = DEFAULT_SUN_SIZE }) {
   return (
     <div
       ref={ref}
-      className="relative flex items-center justify-center rounded-full bg-white"
-      style={{ width: size, height: size, ...sunShellStyle }}
+      className="hero-solar-sun relative flex items-center justify-center rounded-full bg-card"
+      style={{ width: size, height: size }}
       aria-hidden
     >
       <Infinity
-        className="text-[#111]"
+        className="text-foreground"
         size={infinitySize}
         strokeWidth={1.75}
       />
@@ -349,7 +359,7 @@ export default function HeroSolar() {
     const h = system.clientHeight;
     if (!w || !h) return null;
 
-    const visual = getVisualConfig(w);
+    const visual = getVisualConfig(w, h);
     const next = {
       w,
       h,
@@ -454,41 +464,40 @@ export default function HeroSolar() {
   return (
     <section
       ref={rootRef}
-      className="w-full min-h-[100svh]"
-      style={{ background: BG }}
+      className="w-full min-h-[100svh] bg-background"
     >
-      <div className="site-container w-full min-h-[100svh] flex flex-col gap-6 sm:gap-8 [@media(min-width:1024px)_and_(min-height:820px)]:flex-row [@media(min-width:1024px)_and_(min-height:820px)]:items-stretch [@media(min-width:1024px)_and_(min-height:820px)]:gap-8 xl:gap-12 2xl:gap-16 3xl:gap-20">
+      <div className="site-container w-full min-h-[100svh] flex flex-col gap-4 sm:gap-6 [@media(max-height:900px)]:gap-3 [@media(min-width:1024px)_and_(min-height:680px)]:flex-row [@media(min-width:1024px)_and_(min-height:680px)]:items-stretch [@media(min-width:1024px)_and_(min-height:680px)]:gap-6 xl:gap-12 2xl:gap-16 3xl:gap-20">
         {/* Left — content */}
-        <div className="w-full [@media(min-width:1024px)_and_(min-height:820px)]:w-[42%] xl:w-[38%] 2xl:w-[36%] shrink-0 flex flex-col items-center [@media(min-width:1024px)_and_(min-height:820px)]:items-start text-center [@media(min-width:1024px)_and_(min-height:820px)]:text-left justify-center pt-20 pb-6 sm:pt-24 sm:pb-8 md:pb-10 [@media(min-width:1024px)_and_(min-height:820px)]:py-16 [@media(min-width:1024px)_and_(min-height:820px)]:min-h-[100svh]">
-          <p className="text-[11px] sm:text-xs 2xl:text-sm font-medium uppercase tracking-[0.22em] text-[#888]">
+        <div className="w-full [@media(min-width:1024px)_and_(min-height:680px)]:w-[42%] xl:w-[38%] 2xl:w-[36%] shrink-0 flex flex-col items-center [@media(min-width:1024px)_and_(min-height:680px)]:items-start text-center [@media(min-width:1024px)_and_(min-height:680px)]:text-left justify-start [@media(min-width:1024px)_and_(min-height:680px)]:justify-center pt-[4.75rem] pb-4 sm:pt-20 sm:pb-5 md:pb-6 [@media(max-height:900px)]:pt-[4.5rem] [@media(max-height:900px)]:pb-3 [@media(min-width:1024px)_and_(min-height:680px)]:py-10 [@media(min-width:1024px)_and_(min-height:680px)]:min-h-[100svh] [@media(min-width:1024px)_and_(min-height:680px)_and_(max-height:900px)]:py-8">
+          <p className="text-[11px] sm:text-xs 2xl:text-sm font-medium uppercase tracking-[0.22em] text-muted-foreground">
             How we work
           </p>
-          <h1 className="mt-4 sm:mt-5 text-[#111]">
-            <span className="block text-3xl sm:text-4xl md:text-5xl 2xl:text-6xl 3xl:text-7xl font-extrabold tracking-tight leading-tight text-balance">
+          <h1 className="mt-3 sm:mt-4 text-foreground">
+            <span className="block text-3xl sm:text-4xl md:text-5xl 2xl:text-6xl 3xl:text-7xl font-extrabold tracking-tight leading-[1.1] text-balance [@media(max-height:900px)]:text-[1.65rem] [@media(max-height:900px)]:sm:text-3xl [@media(max-height:900px)]:md:text-4xl [@media(min-width:1024px)_and_(min-height:680px)]:text-4xl [@media(min-width:1024px)_and_(min-height:680px)_and_(max-height:900px)]:text-[1.85rem] xl:text-5xl">
               We design and build
             </span>
-            <span className="mt-2 block text-xl sm:text-2xl md:text-3xl 2xl:text-4xl 3xl:text-5xl font-normal text-[#555] tracking-tight leading-tight text-balance">
+            <span className="mt-1.5 sm:mt-2 block text-xl sm:text-2xl md:text-3xl 2xl:text-4xl 3xl:text-5xl font-normal text-foreground/70 tracking-tight leading-[1.15] text-balance [@media(max-height:900px)]:text-lg [@media(max-height:900px)]:sm:text-xl [@media(max-height:900px)]:md:text-2xl [@media(min-width:1024px)_and_(min-height:680px)]:text-xl [@media(min-width:1024px)_and_(min-height:680px)_and_(max-height:900px)]:text-lg xl:text-2xl">
               from first conversation to launch
             </span>
           </h1>
-          <p className="mt-3 sm:mt-4 text-sm sm:text-base 2xl:text-lg text-[#666] leading-relaxed max-w-md 2xl:max-w-lg">
+          <p className="mt-2.5 sm:mt-3 text-sm sm:text-base 2xl:text-lg text-muted-foreground leading-relaxed max-w-md 2xl:max-w-lg [@media(max-height:900px)]:mt-2 [@media(max-height:900px)]:text-[0.8125rem] [@media(max-height:900px)]:sm:text-sm">
             Six clear steps — three action phases, then three outcomes.{" "}
-            <span className="[@media(min-width:1024px)_and_(min-height:820px)]:hidden">Tap a step below to learn more.</span>
-            <span className="hidden [@media(min-width:1024px)_and_(min-height:820px)]:inline">
+            <span className="[@media(min-width:1024px)_and_(min-height:680px)]:hidden">Tap a step below to learn more.</span>
+            <span className="hidden [@media(min-width:1024px)_and_(min-height:680px)]:inline">
               Hover any step on desktop to see what happens at each stage.
             </span>
           </p>
 
-          <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 justify-center [@media(min-width:1024px)_and_(min-height:820px)]:justify-start w-full">
+          <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row gap-2.5 sm:gap-3 justify-center [@media(min-width:1024px)_and_(min-height:680px)]:justify-start w-full [@media(max-height:900px)]:mt-3.5">
             <a
               href="/contact"
-              className="inline-flex items-center justify-center rounded-xl bg-[#111] px-6 sm:px-7 py-3 sm:py-3.5 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
+              className="inline-flex items-center justify-center rounded-xl bg-primary px-6 sm:px-7 py-3 sm:py-3.5 text-sm font-medium text-primary-foreground shadow-sm transition hover:opacity-90"
             >
               Start a project
             </a>
             <a
               href="/work"
-              className="inline-flex items-center justify-center rounded-xl border border-[#ddd] bg-white px-6 sm:px-7 py-3 sm:py-3.5 text-sm font-medium text-[#444] transition hover:bg-white/90"
+              className="inline-flex items-center justify-center rounded-xl border border-border bg-card px-6 sm:px-7 py-3 sm:py-3.5 text-sm font-medium text-foreground/80 transition hover:bg-muted"
             >
               View work
             </a>
@@ -498,11 +507,11 @@ export default function HeroSolar() {
         {/* Solar system — all breakpoints */}
         <div
           ref={systemRef}
-          className="relative w-full flex-1 min-h-[min(52svh,380px)] sm:min-h-[min(54svh,420px)] md:min-h-[min(56svh,460px)] [@media(min-width:1024px)_and_(min-height:820px)]:min-h-0 [@media(min-width:1024px)_and_(min-height:820px)]:h-full [@media(min-width:1024px)_and_(min-height:820px)]:min-h-[100svh] overflow-visible touch-pan-y"
+          className="relative w-full flex-1 min-h-[min(44svh,320px)] sm:min-h-[min(46svh,340px)] md:min-h-[min(48svh,360px)] [@media(max-height:900px)]:min-h-[min(40svh,280px)] [@media(min-width:1024px)_and_(min-height:680px)]:min-h-0 [@media(min-width:1024px)_and_(min-height:680px)]:h-full [@media(min-width:1024px)_and_(min-height:680px)]:min-h-[100svh] overflow-visible touch-pan-y"
         >
           {layout.w > 0 && layout.h > 0 && (
             <svg
-              className="absolute inset-0 pointer-events-none"
+              className="absolute inset-0 pointer-events-none text-muted-foreground/45"
               style={{ zIndex: Z_ORBIT_BEHIND }}
               width={layout.w}
               height={layout.h}
@@ -521,7 +530,7 @@ export default function HeroSolar() {
                     Math.PI * 2,
                   )}
                   fill="none"
-                  stroke="#b5b5b5"
+                  stroke="currentColor"
                   strokeWidth="1"
                   strokeDasharray="5 6"
                 />
@@ -547,7 +556,7 @@ export default function HeroSolar() {
 
           {layout.w > 0 && layout.h > 0 && (
             <svg
-              className="absolute inset-0 pointer-events-none"
+              className="absolute inset-0 pointer-events-none text-muted-foreground/45"
               style={{ zIndex: Z_ORBIT_FRONT }}
               width={layout.w}
               height={layout.h}
@@ -566,7 +575,7 @@ export default function HeroSolar() {
                     Math.PI,
                   )}
                   fill="none"
-                  stroke="#b5b5b5"
+                  stroke="currentColor"
                   strokeWidth="1"
                   strokeDasharray="5 6"
                 />
@@ -606,73 +615,24 @@ export default function HeroSolar() {
                     transition: "opacity 200ms ease, transform 200ms ease",
                   }}
                 >
-                  <div
-                    className="relative"
-                    style={{
-                      background: "#fff",
-                      border: "1px solid #e0e0e0",
-                      borderRadius: 8,
-                      padding: "8px 12px",
-                      boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontSize: 12,
-                        fontWeight: 700,
-                        color: "#111",
-                        lineHeight: 1.2,
-                      }}
-                    >
-                      {p.name}
-                    </div>
-                    <div
-                      style={{
-                        marginTop: 2,
-                        fontSize: 11,
-                        color: "#888",
-                        lineHeight: 1.3,
-                      }}
-                    >
-                      {p.desc}
-                    </div>
-                    <div
-                      className="absolute left-1/2 -translate-x-1/2"
-                      style={{
-                        bottom: -6,
-                        width: 0,
-                        height: 0,
-                        borderLeft: "6px solid transparent",
-                        borderRight: "6px solid transparent",
-                        borderTop: "6px solid #e0e0e0",
-                      }}
-                    />
-                    <div
-                      className="absolute left-1/2 -translate-x-1/2"
-                      style={{
-                        bottom: -5,
-                        width: 0,
-                        height: 0,
-                        borderLeft: "5px solid transparent",
-                        borderRight: "5px solid transparent",
-                        borderTop: "5px solid #fff",
-                      }}
-                    />
+                  <div className="hero-solar-tooltip relative">
+                    <div className="hero-solar-tooltip-title">{p.name}</div>
+                    <div className="hero-solar-tooltip-desc">{p.desc}</div>
+                    <div className="hero-solar-tooltip-arrow-border absolute left-1/2 -translate-x-1/2" />
+                    <div className="hero-solar-tooltip-arrow-fill absolute left-1/2 -translate-x-1/2" />
                   </div>
                 </div>
 
                 <div
                   data-planet-circle
-                  className="relative flex items-center justify-center rounded-full transition-[transform,opacity,filter] duration-200 ease-out"
+                  className={`relative flex items-center justify-center rounded-full transition-[transform,opacity,filter] duration-200 ease-out ${
+                    isAction
+                      ? "hero-solar-planet--action"
+                      : "hero-solar-planet--outcome"
+                  }`}
                   style={{
                     width: planetSize,
                     height: planetSize,
-                    background: isAction ? "#111" : "#fff",
-                    border: isAction ? "none" : "1px solid #ddd",
-                    boxShadow: isAction
-                      ? "0 8px 20px rgba(0,0,0,0.15)"
-                      : "0 2px 8px rgba(0,0,0,0.06)",
-                    color: isAction ? "#fff" : "#333",
                   }}
                 >
                   <Icon size={iconSize} strokeWidth={1.75} aria-hidden />
@@ -680,14 +640,17 @@ export default function HeroSolar() {
 
                 <span
                   data-planet-label
-                  className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap transition-opacity duration-200"
+                  className={`absolute left-1/2 -translate-x-1/2 whitespace-nowrap transition-opacity duration-200 ${
+                    isAction
+                      ? "hero-solar-label--action"
+                      : "hero-solar-label--outcome"
+                  }`}
                   style={{
                     top: planetSize + 6,
                     fontSize: labelSize,
                     fontWeight: 600,
                     letterSpacing: "0.8px",
                     textTransform: "uppercase",
-                    color: isAction ? "#111" : "#555",
                     lineHeight: 1,
                   }}
                 >

@@ -13,7 +13,17 @@ export default function ThemeToggle() {
   }, []);
 
   if (!mounted) {
-    return <div className="p-2 rounded-sm bg-muted" />;
+    return (
+      <button
+        type="button"
+        className="cursor-pointer p-2 rounded-xl bg-muted text-muted-foreground"
+        aria-label="Toggle theme"
+        aria-hidden
+        tabIndex={-1}
+      >
+        <Sun size={20} strokeWidth={2} className="opacity-0" />
+      </button>
+    );
   }
 
   const toggleTheme = () => {

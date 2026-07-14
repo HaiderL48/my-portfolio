@@ -43,7 +43,7 @@ export default function Header() {
       ref={headerRef}
       className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/65 backdrop-blur-sm"
     >
-      <nav className="site-container py-3 md:py-4 2xl:py-5">
+      <nav className="site-container py-2 md:py-2.5 2xl:py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             {/* <div className="w-12  rounded-full flex items-center justify-center">

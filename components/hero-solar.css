@@ -1,0 +1,77 @@
+.hero-solar-sun {
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.dark .hero-solar-sun {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+}
+
+.hero-solar-planet--action {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.hero-solar-planet--outcome {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.dark .hero-solar-planet--outcome {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+}
+
+.hero-solar-label--action {
+  color: var(--foreground);
+}
+
+.hero-solar-label--outcome {
+  color: var(--muted-foreground);
+}
+
+.hero-solar-tooltip {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dark .hero-solar-tooltip {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.hero-solar-tooltip-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--foreground);
+  line-height: 1.2;
+}
+
+.hero-solar-tooltip-desc {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  line-height: 1.3;
+}
+
+.hero-solar-tooltip-arrow-border {
+  bottom: -6px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid var(--border);
+}
+
+.hero-solar-tooltip-arrow-fill {
+  bottom: -5px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid var(--card);
+}
